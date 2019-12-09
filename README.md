@@ -1,5 +1,7 @@
 # paranoia
 
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=SD-Paranoia_Paranoia&metric=alert_status)](https://sonarcloud.io/dashboard?id=SD-Paranoia_Paranoia)
+
 Paranoia Senior Design Project
 
 ## Getting Started
