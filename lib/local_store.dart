@@ -16,7 +16,14 @@ class LocalStorage extends StatefulWidget{
 }
 
 class _LocalStorageState extends State<LocalStorage>{
-  String data = "This isn't from the file";
+  String data = '';
+  final myController = TextEditingController();
+
+  @override
+  void dispose(){
+    myController.dispose();
+    super.dispose();
+  }
 
   Future<String> get _localPath async {
     final directory = await getApplicationDocumentsDirectory();
@@ -43,32 +50,49 @@ class _LocalStorageState extends State<LocalStorage>{
     }
   }
 
-  Future<File> writeToFile() async {
+  Future<File> writeToFile(String text) async {
     final file = await _localFile;
     // Write the file
-    return file.writeAsString('This is from the file');
+    return file.writeAsString(text);
   }
 
   @override
   void initState() {
     super.initState();
-    writeToFile();
-    readFromFile().then((String value){
-      setState((){
-        data = value;
-      });
-    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Can we store things locally?')),
-      body: Center(
-        child: Text(
-          'Data read from a file: \n $data',
+        body: Center(
+          child: Column(
+            children: <Widget>[
+              TextField(
+                decoration: InputDecoration(
+                  border: InputBorder.none,
+                  hintText: 'Write Something...'
+                ),
+                controller: myController,
+              ),
+              RaisedButton(
+                  child: Text('Read Text'),
+                  color: Colors.blue,
+                  onPressed: (){
+                    writeToFile(myController.text);
+                    readFromFile().then((String value) {
+                      setState(() {
+                        data = value;
+                      });
+                    });
+                  },
+              ),
+              Text(
+                'The file now says:\n$data'
+              ),
+            ],
+          ),
         ),
-      ),
     );
   }
 }
