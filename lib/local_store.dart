@@ -71,6 +71,11 @@ class _LocalStorageState extends State<LocalStorage>{
   @override
   void initState() {
     super.initState();
+    readFromFile().then((String value){
+      setState((){
+        data = value;
+      });
+    });
   }
 
   @override
