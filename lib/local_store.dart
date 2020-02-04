@@ -43,12 +43,6 @@ class _LocalStorageState extends State<LocalStorage>{
     return directory.path;
   }
 
-  // An asynchronous method to open a file for reading/writing
-  Future<File> get _localFile async {
-    final path = await _localPath;
-    return File('$path/test.txt');
-  }
-
   //A method to read from our file
   Future<String> readFromFile(String fileName) async {
     try {
