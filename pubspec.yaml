@@ -23,6 +23,8 @@ dependencies:
   path_provider:
   #Encryption
   steel_crypt: ^1.5.4+1
+  #Database
+  sqflite:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
