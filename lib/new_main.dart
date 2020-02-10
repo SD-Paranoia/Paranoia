@@ -16,7 +16,8 @@ class Paranoia extends StatefulWidget{
   _ParanoiaState createState() => _ParanoiaState();
 }
 
-class MyKey extends Paranoia {
+@override
+class MyKey extends ParanoiaHome {
 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,18 +25,30 @@ class MyKey extends Paranoia {
         title: Text('My Key'),
       ),
       body: Center(
-        child: RaisedButton(
-          onPressed: (){
-              Navigator.pop(context);
-            },
-        ),
+        child: Column(
+          children: <Widget>[
+            RaisedButton(
+              child: Text("Show key relationships"),
+              onPressed: (){
+                //Navigator.pop(context);
+              },
+            ),
+            RaisedButton(
+              child: Text("Go Back"),
+              onPressed: (){
+                  Navigator.pop(context);
+                },
+            ),
+        ],
+      ),
       ),
     );
   }
 }
 
-class AddAKey extends StatelessWidget{
-  @override
+@override
+class AddAKey extends Paranoia{
+
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -204,7 +217,7 @@ class _ParanoiaState extends State<Paranoia>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Can we store things locally? Yes.')),
+      appBar: AppBar(title: Text('Generate shared key')),
       body: Center(
         child: Column(
           children: <Widget>[
@@ -230,7 +243,7 @@ class _ParanoiaState extends State<Paranoia>{
               },
             ),
             RaisedButton(
-              child: Text('Generate Symmetric Key'),
+              child: Text('Generate Key'),
               color: Colors.green,
               onPressed: (){
                 generateSymmetricKey();
