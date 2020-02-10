@@ -1,10 +1,8 @@
 //An app to demonstrate reading and writing to files on a device
 
-import 'dart:async';
-import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:steel_crypt/steel_crypt.dart';
+import 'file_functions.dart';
+import 'encryption_functions.dart';
 
 void main(){
   runApp(MaterialApp(
@@ -33,69 +31,6 @@ class _LocalStorageState extends State<LocalStorage>{
   void dispose(){
     myController.dispose();
     super.dispose();
-  }
-
-  // An asynchronous method to get the path
-  Future<String> get _localPath async {
-    final directory = await getApplicationDocumentsDirectory();
-    // For your reference print the AppDoc directory
-    // print(directory.path);
-    return directory.path;
-  }
-
-  //A method to read from our file
-  Future<String> readFromFile(String fileName) async {
-    try {
-      final filePath = await _localPath;
-      File readFile = File('$filePath/$fileName');
-      // Read the file
-      String contents = await readFile.readAsString();
-      // Returning the contents of the file
-      return contents;
-    } catch (e) {
-      // If encountering an error, return
-      return 'Error!';
-    }
-  }
-
-  //A method to write to our file
-  Future<File> writeToFile(String fileName, String text) async {
-    final filePath = await _localPath;
-    // Write the file
-    File writeFile = File('$filePath/$fileName');
-    return writeFile.writeAsString(text);
-  }
-
-  //A function to generate a 32 byte (256 bit) symmetric key and store it
-  void generateSymmetricKey(){
-    //Create a new 32 byte key and write it to a file
-    writeToFile('symmetricKey.txt', CryptKey().genFortuna(32));
-
-  }
-
-  //A function to encrypt a message using AES with a 256 bit key
-  String encryptMsg(String key, String msg){
-    AesCrypt encrypter = AesCrypt(key, 'gcm', 'pkcs7');
-    //Generate a new IV for the message encryption
-    String iv = CryptKey().genDart(16);
-    //Create the message to be sent by encrypting the plaintext and prepending
-    // the IV
-    String newMessage = iv + encrypter.encrypt(msg, iv);
-    return newMessage;
-  }
-  //A function to decrypt a message using AES with a 256 bit key
-  String decryptMsg(String key, String msg){
-    try{
-      AesCrypt decrypter = AesCrypt(key, 'gcm', 'pkcs7');
-      //Get IV from the first 16 bytes of the message
-      String iv = msg.substring(0,16);
-      //Get the encrypted text from the remaining portion of the message
-      String decryptedMessage = msg.substring(16);
-      //Decrypt the message using the IV from the message.
-      return decrypter.decrypt(decryptedMessage,iv);
-    }catch(e){
-      return 'Decryption error!';
-    }
   }
 
   @override
