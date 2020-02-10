@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:paranoia/database_demo.dart';
 import 'local_store.dart';
 
 
@@ -51,6 +52,15 @@ class ParanoiaHome extends StatelessWidget{
                 Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => LocalStorage()));
+              },
+            ),
+            RaisedButton(
+              child: Text('Database Demo'),
+              color: Colors.blue,
+              onPressed: (){
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => DatabaseDemo()));
               },
             ),
           ],
