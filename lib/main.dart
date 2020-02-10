@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'local_store.dart';
+
 
 void main(){
   runApp(MaterialApp(
@@ -34,15 +36,6 @@ class ParanoiaHome extends StatelessWidget{
               },
             ),
             RaisedButton(
-              child: Text('Add a Key'),
-              color: Colors.blue,
-              onPressed: (){
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => AddAKey()));
-              },
-            ),
-            RaisedButton(
               child: Text('Chats'),
               color: Colors.blue,
               onPressed: (){
@@ -50,7 +43,16 @@ class ParanoiaHome extends StatelessWidget{
                     context,
                     MaterialPageRoute(builder: (context) => Chats()));
               },
-            )
+            ),
+            RaisedButton(
+              child: Text('Local Store Demo'),
+              color: Colors.blue,
+              onPressed: (){
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => LocalStorage()));
+              },
+            ),
           ],
         ),
       ),
