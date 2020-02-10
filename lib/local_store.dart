@@ -116,7 +116,7 @@ class _LocalStorageState extends State<LocalStorage>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Can we store things locally?')),
+      appBar: AppBar(title: Text('Can we store things locally? Yes.')),
         body: Center(
           child: Column(
             children: <Widget>[
