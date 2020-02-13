@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:paranoia/database_demo/database_demo_lib.dart';
 import 'package:sqflite/sqflite.dart';
 import 'database_functions.dart';
 
@@ -11,10 +12,22 @@ class DatabaseDemo extends StatefulWidget{
 class _DatabaseDemoState extends State<DatabaseDemo>{
   Database db;
   bool openCheck;
+  String userInfo;
+  int counter;
+  List<ChatInfo> chatList;
 
   @override
   void initState(){
     super.initState();
+    openDB().then((Database database){
+      db = database;
+    });
+    chats().then((List<ChatInfo> chatDB){
+      setState(() {
+        chatList = chatDB;
+        counter = chatList.length;
+      });
+    });
   }
 
   @override
@@ -24,35 +37,48 @@ class _DatabaseDemoState extends State<DatabaseDemo>{
       body: Center(
         child: Column(
           children: <Widget>[
-            Text("Database: $db"),
-            Text("Database open? $openCheck"),
+            Text("Database: $chatList"),
+
             RaisedButton(
-              child: Text("Open Database"),
+              child: Text("Refresh Database View"),
               onPressed: (){
-                openDB().then((Database retVal){
+                chats().then((List<ChatInfo> chatDB){
                   setState(() {
-                    db = retVal;
-                    openCheck = db.isOpen;
+                    chatList = chatDB;
                   });
                 });
               },
             ),
+
             RaisedButton(
-              child: Text("Close Database"),
-              onPressed: (){
-                if(db.isOpen){
-                  db.close().then((void val){
-                    setState((){
-                      openCheck = db.isOpen;
-                      db = null;
-                    });
-                  });
-                }
-              },
-            )
+              child: Text("Insert Into Database"),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => InsertChatDemo()),
+                );
+              }),
+
+            RaisedButton(
+                child: Text("Update Database"),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => UpdateChatDemo()),
+                  );
+                }),
+
+            RaisedButton(
+                child: Text("Delete From Database"),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => DeleteChatDemo()),
+                  );
+                }),
+
           ],
         )
       ),
     );
-  }
-}
+  }}
