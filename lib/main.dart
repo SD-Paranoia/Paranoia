@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:paranoia/database_demo.dart';
 import 'local_store.dart';
+import 'package:paranoia/NetworkDemo.dart';
 
 
 void main(){
@@ -61,6 +62,16 @@ class ParanoiaHome extends StatelessWidget{
                 Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => DatabaseDemo()));
+              },
+            ),
+            RaisedButton(
+              child: Text('Network test'),
+              color: Colors.blue,
+              onPressed: (){
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => NetworkDemo()),
+                );
               },
             ),
           ],
