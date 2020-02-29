@@ -15,6 +15,57 @@ class _NetworkDemoState extends State<NetworkDemo> {
   String ipPort = "http://localhost:5000";
   String body = "";
   int responseCode = 0;
+  final myController = TextEditingController();
+  final myController2 = TextEditingController();
+
+  //Needed to cleanup the text editing controller and free
+  // its resources
+  @override
+  void dispose(){
+    myController.dispose();
+    super.dispose();
+  }
+
+  @override
+  void dispose2(){
+    myController2.dispose();
+    super.dispose();
+  }
+
+  showAlertDialog(BuildContext context) {
+
+    // set up the buttons
+    Widget cancelButton = FlatButton(
+      child: Text("Cancel"),
+      onPressed:  () {
+        Navigator.of(context).pop();
+      },
+    );
+    Widget continueButton = FlatButton(
+      child: Text("Resend"),
+      onPressed:  () {
+
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Error Sending Message!"),
+      content: Text("Message failed to send"),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,13 +75,30 @@ class _NetworkDemoState extends State<NetworkDemo> {
         child: Column(
         children: <Widget>[
           Text("Networking"),
+          TextField(
+            decoration: InputDecoration(
+                border: InputBorder.none,
+                hintText: 'Message...'
+            ),
+            controller: myController,
+          ),
+            TextField(
+            decoration: InputDecoration(
+            border: InputBorder.none,
+            hintText: 'URI input (IP:PORT)'
+        ),
+      controller: myController2,
+    ),
           RaisedButton(
-          child: Text("Post request"),
+          child: Text("Send message"),
             onPressed: (){
-              sendMsg(msg, fingerPrint, ipPort).then((http.Response retVal){
+              sendMsg(myController.text, fingerPrint, "http://" + myController2.text).then((http.Response retVal){
                 setState(() {
                   body = retVal.body;
                   responseCode = retVal.statusCode;
+                  if (responseCode != 200){
+                      showAlertDialog(context);
+                  }
                 });
               });
             }
