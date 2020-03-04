@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:paranoia/database_demo.dart';
 import 'local_store.dart';
 import 'package:paranoia/NetworkDemo.dart';
-import 'package:paranoia/CreateServer.dart';
-import 'package:paranoia/GenerateKey.dart';
 
 
 void main(){
@@ -30,26 +28,52 @@ class ParanoiaHome extends StatelessWidget{
         child: Column(
           children: <Widget>[
             RaisedButton(
-              child: Text('Register New User'),
+              child: Text('My Key'),
               color: Colors.blue,
               onPressed: (){
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => GenerateKey()),
+                  MaterialPageRoute(builder: (context) => MyKey()),
                 );
               },
             ),
-
             RaisedButton(
-                child: Text('Messages'),
-                color: Colors.blue,
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => Chats()));
-                }
-            )
-
+              child: Text('Chats'),
+              color: Colors.blue,
+              onPressed: (){
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Chats()));
+              },
+            ),
+            RaisedButton(
+              child: Text('Local Store Demo'),
+              color: Colors.blue,
+              onPressed: (){
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => LocalStorage()));
+              },
+            ),
+            RaisedButton(
+              child: Text('Database Demo'),
+              color: Colors.blue,
+              onPressed: (){
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => DatabaseDemo()));
+              },
+            ),
+            RaisedButton(
+              child: Text('Network test'),
+              color: Colors.blue,
+              onPressed: (){
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => NetworkDemo()),
+                );
+              },
+            ),
           ],
         ),
       ),
@@ -57,12 +81,12 @@ class ParanoiaHome extends StatelessWidget{
   }
 }
 
-class ViewKey extends StatelessWidget {
+class MyKey extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('View Personal Key'),
+        title: Text('My Key'),
       ),
       body: Center(
         child: Image(
@@ -81,6 +105,7 @@ class AddAKey extends StatelessWidget{
         title: Text('Add a Key'),
       ),
       body: Center(
+
       ),
     );
   }
@@ -91,23 +116,10 @@ class Chats extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Messages'),
+        title: Text('Chats'),
       ),
       body: Center(
-        child: Column(
-          children: <Widget>[
-            RaisedButton(
-              child: Text('Refresh'),
-              color: Colors.green,
-              onPressed: (){
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => NetworkDemo())
-                );
-              }
-            )
-          ]
-        )
+
       ),
     );
   }
