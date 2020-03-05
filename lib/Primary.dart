@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:paranoia/database_functions.dart';
 import 'package:paranoia/encryption_functions.dart';
 import 'package:paranoia/file_functions.dart';
 import 'package:http/http.dart' as http;
@@ -21,6 +22,7 @@ class _PrimaryState extends State<Primary> {
   final name = TextEditingController();
   final pubkey = TextEditingController();
   String body = "";
+  String chatMsg = "";
 
   @override
   void dispose(){
@@ -98,12 +100,6 @@ class _PrimaryState extends State<Primary> {
                     onPressed: () {
 
                       //TODO -- store in database
-                      generateSymmetricKey();
-                      readFromFile('symmetricKey.txt').then((String value) {
-                        setState(() {
-                          keyVal = value;
-                        });
-                      });
 
                       //TODO -- Pull current user's pubkey from database
                       String pubkey2 = "";
@@ -113,11 +109,20 @@ class _PrimaryState extends State<Primary> {
                           if (retVal.statusCode != 200){
                             showAlertDialog(context);
                           }
+                          ChatInfo chat = ChatInfo (pubKey: pubkey.text, name: name.text, symmetricKey: keyVal, serverAddress: myController.text);
+                          insertChatInfo(chat);
 
+                          chats().then((List<ChatInfo> retList){
+                            int val = retList.indexOf(chat);
+                            if (val != -1){
+                              chatMsg = chat.toString();
+                            }
+                          });
                         });
                       });
                     },
-                  )
+                  ),
+
 
                 ])));
   }

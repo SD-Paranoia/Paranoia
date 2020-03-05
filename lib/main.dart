@@ -100,10 +100,7 @@ class Chats extends StatelessWidget {
               child: Text('Refresh'),
               color: Colors.green,
               onPressed: (){
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => NetworkDemo())
-                );
+                //TODO -- Resync with server
               }
             )
           ]

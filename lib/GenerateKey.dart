@@ -4,7 +4,8 @@ import 'package:paranoia/encryption_functions.dart';
 import 'package:paranoia/networking.dart';
 import 'package:http/http.dart' as http;
 import 'package:paranoia/file_functions.dart';
-
+import 'package:paranoia/Primary.dart';
+import 'package:paranoia/Secondary.dart';
 
 class GenerateKey extends StatefulWidget {
   @override
@@ -23,22 +24,30 @@ class _GenerateKeyState extends State<GenerateKey> {
                 children: <Widget>[
 
                   RaisedButton(
-                    child: Text('Generate Symmetric Key'),
+                    child: Text('Primary Message Creator'),
                     color: Colors.green,
                     onPressed: (){
-                      generateSymmetricKey();
-                      readFromFile('symmetricKey.txt').then((String value) {
-                        setState(() {
-                          keyVal = value;
-                        });
-                      });
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Primary()),
+                      );
                     },
                   ),
-                  Text(
-                      'New generated key: \n$keyVal\n'
-                  ),
+                  RaisedButton(
+                    child: Text('Secondary Message Creator'),
+                    color: Colors.blue[700],
+                    onPressed: (){
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Secondary()),
+                      );
+                    },
+                  )
+
                 ])));
 
 
   }
 }
+
+
