@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:paranoia/database_demo.dart';
 import 'local_store.dart';
 import 'package:paranoia/NetworkDemo.dart';
+import 'package:paranoia/qr_code.dart';
 
 
 void main(){
@@ -44,6 +45,15 @@ class ParanoiaHome extends StatelessWidget{
                 Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => Chats()));
+              },
+            ),
+            RaisedButton(
+              child: Text('Add a Code'),
+              color: Colors.blue,
+              onPressed: (){
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => QRViewExample()));
               },
             ),
             RaisedButton(
