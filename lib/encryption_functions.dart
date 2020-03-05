@@ -1,10 +1,9 @@
 import 'package:steel_crypt/steel_crypt.dart';
-import 'file_functions.dart';
 
-//A function to generate a 32 byte (256 bit) symmetric key and store it
-void generateSymmetricKey(){
-  //Create a new 32 byte key and write it to a file
-  writeToFile('symmetricKey.txt', CryptKey().genFortuna(32));
+//A function to generate a 32 byte (256 bit) symmetric key
+String generateSymmetricKey(){
+  //Create a new 32 byte key
+  return CryptKey().genFortuna(32);
 
 }
 
