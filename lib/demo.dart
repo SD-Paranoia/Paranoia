@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:paranoia/asymmetric_demo.dart';
 import 'package:paranoia/database_demo.dart';
 import 'local_store.dart';
 import 'package:paranoia/NetworkDemo.dart';
@@ -71,6 +72,16 @@ class ParanoiaHome extends StatelessWidget{
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => NetworkDemo()),
+                );
+              },
+            ),
+            RaisedButton(
+              child: Text('Asymmetric test'),
+              color: Colors.blue,
+              onPressed: (){
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => AsymmetricDemo()),
                 );
               },
             ),
