@@ -19,7 +19,7 @@ class _DatabaseDemoState extends State<DatabaseDemo>{
   @override
   void initState(){
     super.initState();
-    openDB().then((Database database){
+    openDB("ChatInfo").then((Database database){
       db = database;
     });
     chats().then((List<ChatInfo> chatDB){

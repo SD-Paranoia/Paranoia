@@ -19,6 +19,7 @@ class _UpdateChatState extends State<UpdateChatDemo>{
       pubKey: id,
       name: "User_" + id,
       symmetricKey: CryptKey().genFortuna(32),
+      serverAddress: "http://127.0.0.1:8080",
     );
   }
 

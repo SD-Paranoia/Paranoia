@@ -13,12 +13,14 @@ class _InsertChatState extends State<InsertChatDemo>{
   ChatInfo newChat, chat;
   String success;
   final myController = TextEditingController();
+  Uri myUri = Uri.parse("http://127.0.0.1:8080");
 
   ChatInfo createNewChat(String id){
     return ChatInfo(
       pubKey: id,
       name: "User_" + id,
       symmetricKey: CryptKey().genFortuna(32),
+      serverAddress: "http://127.0.0.1:8080",
     );
   }
 
@@ -62,7 +64,7 @@ class _InsertChatState extends State<InsertChatDemo>{
                         });
                     }, onError: (e){
                       setState(() {
-                        success = "Failed to add chat";
+                        success = "Failed to add chat: $e";
                       });
                     });
                   }),
