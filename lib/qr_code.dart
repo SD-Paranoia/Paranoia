@@ -44,6 +44,7 @@ class _QRViewExampleState extends State<QRViewExample> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(title: Text("QRCode Scanner")),
       body: Column(
         children: <Widget>[
           Expanded(
