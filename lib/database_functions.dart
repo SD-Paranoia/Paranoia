@@ -128,6 +128,28 @@ Future<List<Message>> messages() async{
     );
   });
 }
+//A function to retrieve a list of messages based on what converstation they are
+// a part of
+Future<List<Message>> messagesByPubKey(String pubKey) async{
+  final Database db = await openDB("Message");
+  //Query for the messages with the provided pubKey
+  final List<Map<String, dynamic>> maps = await db.query(
+    'message',
+    //Ensure matching public key
+    where: "pubKey = ?",
+    //Pass the pubKey as a whereArg to prevent SQL injection
+    whereArgs: [pubKey],
+  );
+
+  return List.generate(maps.length, (i) {
+    return Message(
+      messageID: maps[i]['messageID'],
+      pubKey: maps[i]['pubKey'],
+      wasSent: maps[i]['wasSent'],
+      messageText: maps[i]['messageText'],
+    );
+  });
+}
 
 Future<void> insertChatInfo(ChatInfo chat) async{
   final Database db = await openDB("ChatInfo");

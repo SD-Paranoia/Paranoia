@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:paranoia/ChatView.dart';
 import 'package:paranoia/database_demo.dart';
 import 'local_store.dart';
 import 'package:paranoia/NetworkDemo.dart';
@@ -41,12 +42,12 @@ class ParanoiaHome extends StatelessWidget{
             ),
 
             RaisedButton(
-                child: Text('Messages'),
+                child: Text('Chats'),
                 color: Colors.blue,
                 onPressed: () {
                   Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => Chats()));
+                      MaterialPageRoute(builder: (context) => ChatView()));
                 }
             )
 
