@@ -57,11 +57,23 @@ class _ChatViewState extends State<ChatView> {
 }
 }
 
-class MessageView extends StatelessWidget{
+class MessageView extends StatefulWidget{
   final List<Message> messages;
 
   //Require a list of messages to display
   MessageView({@required this.messages});
+
+  @override
+  _MessageViewState createState() => new _MessageViewState();
+}
+
+
+class _MessageViewState extends State<MessageView>{
+
+  @override
+  void initState(){
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -71,9 +83,9 @@ class MessageView extends StatelessWidget{
       ),
       //Construct the ListView of messages
       body: ListView.builder(
-        itemCount: messages.length,
+        itemCount: widget.messages.length,
         itemBuilder: (_, int position){
-          final item = messages[position];
+          final item = widget.messages[position];
           //Display each message on a card
           //The wasSent value determines the message appearance
           if(item.wasSent == 1){ //if message wasSent
