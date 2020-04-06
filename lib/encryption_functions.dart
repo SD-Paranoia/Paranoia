@@ -1,64 +1,12 @@
-import 'dart:math';
-import 'dart:typed_data';
-
-import 'package:paranoia/file_functions.dart';
-import 'package:steel_crypt/PointyCastleN/api.dart';
 import 'package:steel_crypt/PointyCastleN/export.dart';
 import 'package:steel_crypt/steel_crypt.dart';
+import 'package:paranoia/asymmetric_encryption.dart';
 //A function to generate a 32 byte (256 bit) symmetric key
 String generateSymmetricKey(){
   //Create a new 32 byte key
   return CryptKey().genFortuna(32);
 
 }
-//Get a SecureRandom value generator
-SecureRandom getSecureRandom(){
-  final SecureRandom randVal = FortunaRandom();
-  final seedSource = Random.secure();
-  final seeds = <int>[];
-  //Populate seed list
-  for(int i = 0; i < 32; i++){
-    seeds.add(seedSource.nextInt(255));
-  }
-  //Use values from seed list to seed the SecureRandom value
-  randVal.seed(KeyParameter(Uint8List.fromList(seeds)));
-
-  return randVal;
-}
-
-//Generate and store an Asymmetric keypair
-void generatePublicPrivateKeypair(){
-  SecureRandom secureRandom = getSecureRandom();
-  final rsaParams = RSAKeyGeneratorParameters(BigInt.parse('65537'), 2048, 64);
-  final keyGen = RSAKeyGenerator();
-  keyGen.init(ParametersWithRandom(rsaParams, secureRandom));
-
-  final pair = keyGen.generateKeyPair();
-
-  final public = pair.publicKey as RSAPublicKey;
-  final private = pair.privateKey as RSAPrivateKey;
-
-  //Write the public and private keys to files in the PEM format
-  writeToFile("publicKey.pem",  RsaCrypt().encodeKeyToString(public));
-  writeToFile("privateKey.pem", RsaCrypt().encodeKeyToString(private));
-
-}
-//Get the device owner's public key
-Future<RSAPublicKey> getPublicKey() async{
-  RSAPublicKey key;
-  String pemString = await readFromFile("publicKey.pem");
-  key = RsaCrypt().parseKeyFromString(pemString);
-  return key;
-}
-
-//Get the device owner's private key
-Future<RSAPrivateKey> getPrivateKey() async{
-  RSAPrivateKey key;
-  String pemString = await readFromFile("privateKey.pem");
-  key = RsaCrypt().parseKeyFromString(pemString);
-  return key;
-}
-
 //A function to encrypt a message using AES with a 256 bit key
 String encryptMsg(String key, String msg){
   AesCrypt encrypter = AesCrypt(key, 'gcm', 'pkcs7');
@@ -82,4 +30,26 @@ String decryptMsg(String key, String msg){
   }catch(e){
     return 'Decryption error!';
   }
+}
+//A function to get the public key as a string
+Future<String> publicKeyAsString() async{
+  RSAPublicKey publicKey;
+  Map<String, dynamic> keyVals = await getKeyVals("public");
+  publicKey = RSAPublicKey(
+      BigInt.tryParse(keyVals["n"]),
+      BigInt.tryParse(keyVals["e"])
+  );
+  return RsaCrypt().encodeKeyToString(publicKey);
+}
+//A function to get the private key as a string
+Future<String> privateKeyAsString() async{
+  RSAPrivateKey privateKey;
+  Map<String, dynamic> keyVals = await getKeyVals("private");
+  privateKey = RSAPrivateKey(
+      BigInt.tryParse(keyVals["n"]),
+      BigInt.tryParse(keyVals["d"]),
+      BigInt.tryParse(keyVals["p"]),
+      BigInt.tryParse(keyVals["q"])
+  );
+  return RsaCrypt().encodeKeyToString(privateKey);
 }
