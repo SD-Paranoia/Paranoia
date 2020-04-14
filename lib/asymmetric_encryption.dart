@@ -139,7 +139,6 @@ bool rsaVerify(RSAPublicKey publicKey, String signature, String message){
   verifier.init(false, PublicKeyParameter<RSAPublicKey>(publicKey));
   //Convert the message to bytes
   final messageBytes = utf8.encode(message);
-
   try{
     return verifier.verifySignature(messageBytes, sig);
   }on ArgumentError {

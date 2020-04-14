@@ -1,8 +1,11 @@
 //An app to demonstrate reading and writing to files on a device
 
 import 'package:flutter/material.dart';
+import 'package:paranoia/asymmetric_encryption.dart';
+import 'package:paranoia/database_functions.dart';
 import 'file_functions.dart';
 import 'encryption_functions.dart';
+import 'package:pointycastle/export.dart';
 
 void main(){
   runApp(MaterialApp(
@@ -23,6 +26,7 @@ class _LocalStorageState extends State<LocalStorage>{
   //The data to be printed on the screen
   String data = '';
   String keyVal, cipherText;
+  String publicKey;
   final myController = TextEditingController();
 
   //Needed to cleanup the text editing controller and free
@@ -46,6 +50,11 @@ class _LocalStorageState extends State<LocalStorage>{
         keyVal = value;
       });
     });
+    publicKeyAsString().then((String pubKey){
+      setState(() {
+        publicKey = pubKey;
+      });
+    });
   }
 
   @override
@@ -53,7 +62,7 @@ class _LocalStorageState extends State<LocalStorage>{
     return Scaffold(
       appBar: AppBar(title: Text('Can we store things locally? Yes.')),
         body: Center(
-          child: Column(
+          child: ListView(
             children: <Widget>[
               // The text entry field
               TextField(
@@ -67,8 +76,9 @@ class _LocalStorageState extends State<LocalStorage>{
               RaisedButton(
                   child: Text('Encrypt Message'),
                   color: Colors.blue,
-                  onPressed: (){
-                    writeToFile('msg.txt', encryptMsg(keyVal, myController.text));
+                  onPressed: () async{
+                    RSAPrivateKey privateKey = await getPrivateKey();
+                    writeToFile('msg.txt', encryptMsg(keyVal, myController.text, privateKey));
                     readFromFile('msg.txt').then((String value) {
                       setState(() {
                         cipherText = value;
@@ -79,14 +89,19 @@ class _LocalStorageState extends State<LocalStorage>{
               RaisedButton(
                 child: Text('Generate Symmetric Key'),
                 color: Colors.green,
-                onPressed: (){
-                  generateSymmetricKey();
-                  readFromFile('symmetricKey.txt').then((String value) {
-                    setState(() {
-                      keyVal = value;
-
-                    });
+                onPressed: () async{
+                  setState(() {
+                    keyVal = generateSymmetricKey();
                   });
+                  ChatInfo chat = new ChatInfo(
+                      pubKey: publicKey,
+                      name: "User_Jordan_Real_Key",
+                      symmetricKey: keyVal,
+                      serverAddress: "addr"
+                  );
+                  await insertChatInfo(chat);
+
+
                 },
               ),
               // The text being printed on the screen
@@ -100,7 +115,7 @@ class _LocalStorageState extends State<LocalStorage>{
                 onPressed: (){
                   readFromFile('msg.txt').then((String message) {
                     setState(() {
-                      data = decryptMsg(keyVal, message);
+                      data = decryptMsg(keyVal, message, publicKey);
                     });
                   });
                 },
