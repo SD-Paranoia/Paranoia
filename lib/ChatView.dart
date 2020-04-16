@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:paranoia/asymmetric_encryption.dart';
 import 'package:paranoia/database_functions.dart';
+import 'package:paranoia/database_functions.dart' as prefix0;
+import 'package:paranoia/encryption_functions.dart';
+import 'package:steel_crypt/PointyCastleN/export.dart';
 
 class ChatView extends StatefulWidget{
 
@@ -40,7 +44,7 @@ class _ChatViewState extends State<ChatView> {
                           messagesByPubKey(item.pubKey).then((List<Message> messageList){
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => MessageView(messages: messageList,)),
+                              MaterialPageRoute(builder: (context) => MessageView(messages: messageList, chatInfo: item)),
                             );
                           });
                         },
@@ -59,9 +63,9 @@ class _ChatViewState extends State<ChatView> {
 
 class MessageView extends StatefulWidget{
   final List<Message> messages;
-
+  final ChatInfo chatInfo;
   //Require a list of messages to display
-  MessageView({@required this.messages});
+  MessageView({@required this.messages, @required this.chatInfo});
 
   @override
   _MessageViewState createState() => new _MessageViewState();
@@ -70,52 +74,107 @@ class MessageView extends StatefulWidget{
 
 class _MessageViewState extends State<MessageView>{
 
+  final messageTextController = TextEditingController();
+  int messageCount;
+  //Needed to cleanup the text editing controller and free
+  // its resources
+  @override
+  void dispose(){
+    messageTextController.dispose();
+    super.dispose();
+  }
+
   @override
   void initState(){
     super.initState();
+    messages().then((List<Message> messagesList){
+      setState(() {
+        messageCount = messagesList.length;
+      });
+    });
+  }
+
+  void sendMessage() async{
+    final messageID = messageCount + 1;
+    final privateKey = await getPrivateKey();
+    //Encrypt the message
+    String messageText = encryptMsg(widget.chatInfo.symmetricKey, messageTextController.text, privateKey);
+    //Create a new message
+    Message newMessage = new Message(
+        messageID: messageID,
+        messageText: messageText,
+        pubKey: widget.chatInfo.pubKey,
+        wasSent: 1,
+    );
+    //Add the new message to the database
+    insertMessage(newMessage);
+
+    messageTextController.clear();
+    setState(() {
+      widget.messages.add(newMessage);
+      messageCount = messageID;
+    });
+
+    //TODO Send message over network for other user
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Messages"),
+        title: Text(widget.chatInfo.name),
       ),
       //Construct the ListView of messages
-      body: ListView.builder(
-        itemCount: widget.messages.length,
-        itemBuilder: (_, int position){
-          final item = widget.messages[position];
-          //Display each message on a card
-          //The wasSent value determines the message appearance
-          if(item.wasSent == 1){ //if message wasSent
-            return Card(
-              child: ListTile(
-              title: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  Text(item.messageText)
-                ],
-              ),
-              ),
-              color: Colors.blue,
-            );
-          }
-          else{ //if message was received
-            return Card(
-              child: ListTile(
-                title: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: <Widget>[
-                      Text(item.messageText)
-                    ],
-                ),
-              ),
-            );
-          }
+      body: Column(
+        children: <Widget>[
+          Flexible(
+              child: ListView.builder(
+                itemCount: widget.messages.length,
+                itemBuilder: (_, int position){
+                  final item = widget.messages[position];
+                  //Display each message on a card
+                  //The wasSent value determines the message appearance
+                  if(item.wasSent == 1){ //if message was sent
+                    return Card(
+                      child: Text(
+                        decryptMsg(
+                          widget.chatInfo.symmetricKey,
+                          item.messageText,
+                          widget.chatInfo.pubKey
+                        )
+                      ),
+                      color: Colors.blue,
 
-          },
-              )
+                    );
+                  }
+                  else{ //if message was received
+                    return Card(
+                      child:Text(
+                          decryptMsg(
+                              widget.chatInfo.symmetricKey,
+                              item.messageText,
+                              widget.chatInfo.pubKey
+                          )
+                      )
+                    );
+                  }
+                },
+              ),
+          ),
+          // The text entry field
+          TextField(
+            decoration: InputDecoration(
+                border: InputBorder.none,
+                hintText: 'Write Something...'
+            ),
+            controller: messageTextController,
+          ),
+          RaisedButton(
+            child: Text("Send"),
+            onPressed: sendMessage,
+          )
+        ],
+      )
           );
         }
   }
