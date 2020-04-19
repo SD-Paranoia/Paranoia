@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:paranoia/asymmetric_encryption.dart';
 import 'package:paranoia/database_functions.dart';
 import 'package:paranoia/encryption_functions.dart';
 import 'package:paranoia/file_functions.dart';
 import 'package:http/http.dart' as http;
 import 'package:paranoia/database_demo.dart';
+import 'package:paranoia/group_creation.dart';
+import 'package:pointycastle/asymmetric/api.dart';
 import 'local_store.dart';
 import 'package:paranoia/networking.dart';
 import 'package:paranoia/CreateServer.dart';
@@ -20,7 +23,7 @@ class _PrimaryState extends State<Primary> {
 
   final myController = TextEditingController();
   final name = TextEditingController();
-  final pubkey = TextEditingController();
+  //final pubkey = TextEditingController();
   String body = "";
   String chatMsg = "";
 
@@ -75,11 +78,11 @@ class _PrimaryState extends State<Primary> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text("Primary Message Creator")),
+        appBar: AppBar(title: Text("User Registration")),
         body: Center(
             child: Column(
                 children: <Widget>[
-                  Text("Enter Server Information"),
+                  Text("Enter Server and Chat Information"),
                   TextField(
                     decoration: InputDecoration(
                         border: InputBorder.none,
@@ -95,34 +98,40 @@ class _PrimaryState extends State<Primary> {
                     controller: name,
                   ),
                   RaisedButton(
-                    child: Text('Generate Symmetric key'),
+                    child: Text('Generate keys'),
                     color: Colors.green,
                     onPressed: () {
+                      String pubKey = "";
+                      //Generate new asymmetric key and store in database
+                      generatePublicPrivateKeypair();
 
-                      //TODO -- store in database
-
-                      //TODO -- Pull current user's pubkey from database
-                      String pubkey2 = "";
-                      registerUser(pubkey.text, pubkey2, myController.text).then((http.Response retVal) {
-                        setState(() {
-                          body = retVal.body;
-                          if (retVal.statusCode != 200){
-                            showAlertDialog(context);
-                          }
-                          ChatInfo chat = ChatInfo (pubKey: pubkey.text, name: name.text, symmetricKey: keyVal, serverAddress: myController.text);
-                          insertChatInfo(chat);
-
-                          chats().then((List<ChatInfo> retList){
-                            int val = retList.indexOf(chat);
-                            if (val != -1){
-                              chatMsg = chat.toString();
-                            }
+                      //Pull current user's pubkey from database
+                      publicKeyAsString().then((String retVal) {
+                        //Get the public key
+                        pubKey = retVal;
+                        //Get the private key
+                        getPrivateKey().then((RSAPrivateKey privKey) {
+                          //Sign the public key with the private
+                          String signedPublic = rsaSign(privKey, pubKey);
+                          //Get the public key
+                          getPublicKey().then((RSAPublicKey key2) {
+                            //Now after signed, send it to server to register user
+                            registerUser(pubKey, signedPublic, myController.text);
                           });
                         });
-                      });
-                    },
-                  ),
 
+                        //Now, get the user's UUID from the server
+                        getPublicFingerprint().then((var fingerPrint) {
+                          //And send it to the server
+                          challengeUser(fingerPrint.toString(), myController.text);
+                        });
+                      });
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Group_Creation()),
+                      );
+                    }
+                  )
 
                 ])));
   }

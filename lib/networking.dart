@@ -31,16 +31,18 @@ Future<http.Response> registerUser(String pubKey, String signature, String ipPor
   http.Response uriResponse;
 
   try {
-    uriResponse = await client.post(ipPort+"/reg",
+    uriResponse = await client.post("https://" +ipPort+"/reg",
         headers: {"Content-Type": "application/json"},
-        body: json.encode({'Public': pubKey, 'Signature': signature})
+        body: json.encode({'Public': pubKey, 'Sig': signature})
     );
 
     if (uriResponse.statusCode == 200){
       print("User registered!");
     }
     else {
+      //print();
       print("Failed to register chat");
+      print(uriResponse.body.toString());
     }
   }
   finally{
@@ -54,15 +56,16 @@ Future<http.Response> challengeUser(String fingerPrint, String ipPort) async {
   http.Response uriResponse;
 
   try {
-    uriResponse = await client.post(ipPort+"/chal",
+    uriResponse = await client.post("https://"+ipPort+"/chal",
         headers: {"Content-Type": "application/json"},
-        body: json.encode({'Fingerprint': fingerPrint})
+        body: json.encode({'FingerPrint': fingerPrint})
     );
 
     if (uriResponse.statusCode == 200){
       //TODO -- do something here
-      String uuid = uriResponse.toString();
-      print(uuid);
+      //print(jsonDecode(uriResponse.body));
+      Map<String, dynamic> uuid = jsonDecode(uriResponse.body);
+      print(uuid.values.toString());
     }
     else {
       print("Failed challenge stage");
@@ -74,14 +77,14 @@ Future<http.Response> challengeUser(String fingerPrint, String ipPort) async {
   return uriResponse;
 }
 
-Future<http.Response> createGroup(String UUID, String members, String fingerPrint, String signedChallenge, String ipPort) async {
+Future<http.Response> createGroup(String members, String fingerPrint, String signedChallenge, String ipPort) async {
   var client = http.Client();
   http.Response uriResponse;
 
   try {
     uriResponse = await client.post(ipPort+"/convo",
         headers: {"Content-Type": "application/json"},
-        body: json.encode({'UUID': UUID, "Members":[members],"FingerPrint":fingerPrint, "SignedChallenge":signedChallenge})
+        body: json.encode({'UUID': "", "Members":[members],"FingerPrint":fingerPrint, "SignedChallenge":signedChallenge})
     );
 
     if (uriResponse.statusCode == 200){

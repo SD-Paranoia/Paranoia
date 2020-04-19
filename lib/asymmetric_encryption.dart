@@ -6,7 +6,8 @@
 import 'dart:convert';
 import 'dart:math';
 import 'dart:typed_data';
-
+import 'package:crypto/crypto.dart';
+import 'package:paranoia/encryption_functions.dart';
 import 'package:paranoia/file_functions.dart';
 import 'package:pointycastle/api.dart';
 import 'package:pointycastle/export.dart';
@@ -98,6 +99,17 @@ Future<RSAPublicKey> getPublicKey() async{
       BigInt.tryParse(keyVals["e"])
   );
   return key;
+}
+
+//Get the owner's public key fingerprint
+Future getPublicFingerprint() async{
+  //Get the public key into PEM format and encode
+  var keyString = await publicKeyAsString();
+  final key = utf8.encode(keyString);
+  //Sha256 Hashit
+  var fingerPrint = sha256.convert(key);
+  //now return the fingerPrint
+  return fingerPrint;
 }
 
 //Get the device owner's private key

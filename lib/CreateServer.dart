@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:paranoia/networking.dart';
 import 'package:http/http.dart' as http;
+import 'package:paranoia/asymmetric_encryption.dart';
 
 
 class CreateServer extends StatefulWidget {
@@ -78,7 +79,10 @@ class _CreateServerState extends State<CreateServer> {
                   RaisedButton(
                       child: Text("Exchange Key"),
                       onPressed: (){
-                        sendMsg(myController.text, fingerPrint, "http://" + myController2.text).then((http.Response retVal){
+                        //String msg, String fingerPrint, String signedChallenge, String groupID, String ipPort
+
+                        //rsaSign(getPrivateKey(), myController.text;
+                        sendMsg(myController.text, fingerPrint, "", "", "https://" + myController2.text).then((http.Response retVal){
                           setState(() {
                             body = retVal.body;
                             responseCode = retVal.statusCode;

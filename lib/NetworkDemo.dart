@@ -92,7 +92,7 @@ class _NetworkDemoState extends State<NetworkDemo> {
           RaisedButton(
           child: Text("Send message"),
             onPressed: (){
-              sendMsg(myController.text, fingerPrint, "http://" + myController2.text).then((http.Response retVal){
+              sendMsg(myController.text, fingerPrint, "", "", "https://" + myController2.text).then((http.Response retVal){
                 setState(() {
                   body = retVal.body;
                   responseCode = retVal.statusCode;
