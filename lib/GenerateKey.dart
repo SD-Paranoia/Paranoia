@@ -24,7 +24,7 @@ class _GenerateKeyState extends State<GenerateKey> {
                 children: <Widget>[
 
                   RaisedButton(
-                    child: Text('Primary Message Creator'),
+                    child: Text('Register User'),
                     color: Colors.green,
                     onPressed: (){
                       Navigator.push(
@@ -33,16 +33,6 @@ class _GenerateKeyState extends State<GenerateKey> {
                       );
                     },
                   ),
-                  RaisedButton(
-                    child: Text('Secondary Message Creator'),
-                    color: Colors.blue[700],
-                    onPressed: (){
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => Secondary()),
-                      );
-                    },
-                  )
 
                 ])));
 
