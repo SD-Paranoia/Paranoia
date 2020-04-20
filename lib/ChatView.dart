@@ -21,6 +21,7 @@ class _ChatViewState extends State<ChatView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: Color(0x21ffffff),
         appBar: AppBar(
           title: Text("Chats"),
     ),
