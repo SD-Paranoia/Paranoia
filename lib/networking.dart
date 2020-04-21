@@ -6,7 +6,7 @@ Future<http.Response> sendMsg(String msg, String fingerPrint, String signedChall
   var client = http.Client();
    http.Response uriResponse;
   try {
-    uriResponse = await client.post(ipPort+"/write",
+    uriResponse = await client.post("https://"+ipPort+"/write",
       headers: {"Content-Type": "application/json"},
       body: json.encode({"FingerPrint": fingerPrint, "SignedChallenge":signedChallenge,"GroupID":groupID,"Content":msg})
     );
@@ -51,9 +51,10 @@ Future<http.Response> registerUser(String pubKey, String signature, String ipPor
   return uriResponse;
 }
 
-Future<http.Response> challengeUser(String fingerPrint, String ipPort) async {
+Future<String> challengeUser(String fingerPrint, String ipPort) async {
   var client = http.Client();
   http.Response uriResponse;
+  String userChal = "";
 
   try {
     uriResponse = await client.post("https://"+ipPort+"/chal",
@@ -65,7 +66,8 @@ Future<http.Response> challengeUser(String fingerPrint, String ipPort) async {
       //TODO -- do something here
       //print(jsonDecode(uriResponse.body));
       Map<String, dynamic> uuid = jsonDecode(uriResponse.body);
-      print(uuid.values.toString());
+
+      userChal = uuid['UUID'];
     }
     else {
       print("Failed challenge stage");
@@ -74,32 +76,38 @@ Future<http.Response> challengeUser(String fingerPrint, String ipPort) async {
   finally{
     client.close();
   }
-  return uriResponse;
+  return userChal;
 }
 
-Future<http.Response> createGroup(String members, String fingerPrint, String signedChallenge, String ipPort) async {
+Future<String> createGroup(List members, String fingerPrint, String signedChallenge, String ipPort) async {
   var client = http.Client();
   http.Response uriResponse;
+  String groupID = "";
 
   try {
-    uriResponse = await client.post(ipPort+"/convo",
+    uriResponse = await client.post("https://"+ipPort+"/convo",
         headers: {"Content-Type": "application/json"},
-        body: json.encode({'UUID': "", "Members":[members],"FingerPrint":fingerPrint, "SignedChallenge":signedChallenge})
+        body: json.encode({"UUID": "", "Members": members,"FingerPrint":fingerPrint, "SignedChallenge":signedChallenge})
     );
 
     if (uriResponse.statusCode == 200){
       //TODO -- do something here
-      String response = uriResponse.toString();
-      print(response);
+      print("Successfully created group");
+      String response = uriResponse.body;
+      Map<String, dynamic> uuid = jsonDecode(uriResponse.body);
+
+      groupID = uuid['UUID'];
     }
     else {
       print("Failed to create group");
+      print(json.encode({"UUID": "", "Members": members,"FingerPrint":fingerPrint, "SignedChallenge":signedChallenge}));
+
     }
   }
   finally{
     client.close();
   }
-  return uriResponse;
+  return groupID;
 }
 
 Future<http.Response> getMsg(String fingerPrint, String signedChallenge, String ipPort) async {
@@ -107,7 +115,7 @@ Future<http.Response> getMsg(String fingerPrint, String signedChallenge, String 
   http.Response uriResponse;
 
   try {
-    uriResponse = await client.post(ipPort+"/read",
+    uriResponse = await client.post("https://"+ipPort+"/read",
         headers: {"Content-Type": "application/json"},
         body: json.encode({'Fingerprint': fingerPrint,"SignedChallenge":signedChallenge})
     );

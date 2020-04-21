@@ -12,19 +12,18 @@ import 'package:paranoia/CreateServer.dart';
 import 'package:paranoia/GenerateKey.dart';
 
 
-class Group_Creation extends StatefulWidget {
+class Group_Creation_Second extends StatefulWidget {
+  final String ipAddr;
+  Group_Creation_Second(this.ipAddr, {Key key}) : super (key: key);
 
   @override
-  _Group_CreationState createState() => _Group_CreationState();
+  _Group_CreationSState createState() => _Group_CreationSState();
 }
 
-class _Group_CreationState extends State<Group_Creation> {
-  String keyVal;
+class _Group_CreationSState extends State<Group_Creation_Second> {
 
   final myController = TextEditingController();
-  final name = TextEditingController();
-  final pubkey = TextEditingController();
-
+  var pubFinger;
   @override
   void dispose(){
     myController.dispose();
@@ -32,9 +31,14 @@ class _Group_CreationState extends State<Group_Creation> {
   }
 
   @override
-  void dispose1(){
-    name.dispose();
-    super.dispose();
+  void initState(){
+    super.initState();
+
+    getPublicFingerprint().then((var fingerPrint){
+      setState(() {
+        pubFinger = fingerPrint;
+      });
+    });
   }
 
   @override
@@ -45,15 +49,32 @@ class _Group_CreationState extends State<Group_Creation> {
             child: Column(
                 children: <Widget>[
 
-                  Text("Idk what this is"),
+                  Text("Create a Group"),
+
+                  TextField(
+                    decoration: InputDecoration(
+                        border: InputBorder.none,
+                        hintText: 'Public Fingerprint of Primary user'
+                    ),
+                    controller: myController,
+                  ),
 
                   RaisedButton(
                     child: Text("Save Info"),
                     color: Colors.greenAccent[400],
                     onPressed: (){
-                      //TODO -- store in database
+                      //Store in database
+
+
+                      chats().then((var retVal){
+                        print(retVal);
+                      });
+
                     },
-                  )
+
+                  ),
+
+                  Text("Public key: $pubFinger")
 
                 ])));
   }
