@@ -18,6 +18,7 @@ class _GenerateKeyState extends State<GenerateKey> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: Color(0x21ffffff),
         appBar: AppBar(title: Text("Generate New Key")),
         body: Center(
             child: Column(
@@ -25,7 +26,7 @@ class _GenerateKeyState extends State<GenerateKey> {
 
                   RaisedButton(
                     child: Text('Register Primary User'),
-                    color: Colors.green,
+                    color: Colors.blue,
                     onPressed: (){
                       Navigator.push(
                         context,
@@ -35,7 +36,7 @@ class _GenerateKeyState extends State<GenerateKey> {
                   ),
                   RaisedButton(
                     child: Text('Register Secondary User'),
-                    color: Colors.green,
+                    color: Colors.blue,
                     onPressed: (){
                       Navigator.push(
                         context,

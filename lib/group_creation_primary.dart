@@ -46,6 +46,7 @@ class _Group_CreationState extends State<Group_Creation> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: Color(0x21ffffff),
         appBar: AppBar(title: Text("Create a Group")),
         body: Center(
             child: Column(
@@ -63,7 +64,7 @@ class _Group_CreationState extends State<Group_Creation> {
 
                   RaisedButton(
                     child: Text("Save Info"),
-                    color: Colors.greenAccent[400],
+                    color: Colors.blue,
                     onPressed: (){
                       String finger = pubFinger.toString();
                       var hashedUUID;

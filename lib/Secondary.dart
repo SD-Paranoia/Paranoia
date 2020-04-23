@@ -76,7 +76,7 @@ class _SecondaryState extends State<Secondary> {
                   ),
                   RaisedButton(
                     child: Text("Save Info"),
-                    color: Colors.greenAccent[400],
+                    color: Colors.blue,
                     onPressed: (){
                       //TODO -- register user via network
                       String pubKey = "";
