@@ -82,7 +82,7 @@ class _CreateServerState extends State<CreateServer> {
                         //String msg, String fingerPrint, String signedChallenge, String groupID, String ipPort
 
                         //rsaSign(getPrivateKey(), myController.text;
-                        sendMsg(myController.text, fingerPrint, "", "", "http://" + myController2.text).then((http.Response retVal){
+                        sendMsg(myController.text, fingerPrint, "", "", "https://" + myController2.text).then((http.Response retVal){
                           setState(() {
                             body = retVal.body;
                             responseCode = retVal.statusCode;
