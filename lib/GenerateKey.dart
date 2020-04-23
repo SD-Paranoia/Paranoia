@@ -22,6 +22,8 @@ class _GenerateKeyState extends State<GenerateKey> {
         appBar: AppBar(title: Text("Generate New Key")),
         body: Center(
             child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
 
                   RaisedButton(

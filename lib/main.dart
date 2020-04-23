@@ -103,7 +103,7 @@ class Chats extends StatelessWidget {
           child: Column(children: <Widget>[
         RaisedButton(
             child: Text('Refresh'),
-            color: Colors.green,
+            color: Colors.blue,
             shape: RoundedRectangleBorder(
               borderRadius: new BorderRadius.circular(5.0),
             ),

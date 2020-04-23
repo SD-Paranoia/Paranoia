@@ -109,7 +109,7 @@ class _PrimaryState extends State<Primary> {
                   ),
                   RaisedButton(
                     child: Text('Generate keys'),
-                    color: Colors.green,
+                    color: Colors.blue,
                     onPressed: () {
                       String pubKey = "";
                       //Generate new asymmetric key and store in database
