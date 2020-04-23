@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:paranoia/encryption_functions.dart';
 import 'package:paranoia/file_functions.dart';
+import 'package:paranoia/qr_code_scanner.dart';
 
 
 class Secondary extends StatefulWidget {
+
+  const Secondary({
+    Key key,
+  }) : super(key: key);
 
   @override
   _SecondaryState createState() => _SecondaryState();
@@ -19,6 +25,7 @@ class _SecondaryState extends State<Secondary> {
   @override
   void dispose(){
     myController.dispose();
+    qrcontroller?.dispose();
     super.dispose();
   }
 
@@ -27,6 +34,10 @@ class _SecondaryState extends State<Secondary> {
     name.dispose();
     super.dispose();
   }
+
+  final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
+  var qrText = "";
+  QRViewController qrcontroller;
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +48,27 @@ class _SecondaryState extends State<Secondary> {
                 children: <Widget>[
 
                   Text("Here is where the camera API goes"),
-
+                  Expanded(
+                    child: QRView(
+                      key: qrKey,
+                      onQRViewCreated: _onQRViewCreated,
+                    ),
+                    flex: 4,
+                  ),
+                  RaisedButton(
+                    child: Text("Turn on Camera"),
+                    color: Colors.greenAccent[400],
+                    onPressed: (){
+                      qrcontroller.resumeCamera();
+                    },
+                  ),
+                  RaisedButton(
+                    child: Text("Flip on Camera"),
+                    color: Colors.greenAccent[400],
+                    onPressed: (){
+                      qrcontroller.flipCamera();
+                    },
+                  ),
                   Text("Enter Server Information"),
                   TextField(
                     decoration: InputDecoration(
@@ -62,5 +93,13 @@ class _SecondaryState extends State<Secondary> {
                   )
 
                 ])));
+  }
+  void _onQRViewCreated(QRViewController controller) {
+    this.qrcontroller = controller;
+    controller.scannedDataStream.listen((scanData) {
+      setState(() {
+        qrText = scanData;
+      });
+    });
   }
 }
