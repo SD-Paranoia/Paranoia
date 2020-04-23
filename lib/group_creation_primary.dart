@@ -8,6 +8,7 @@ import 'package:paranoia/file_functions.dart';
 import 'package:http/http.dart' as http;
 import 'package:paranoia/database_demo.dart';
 import 'package:pointycastle/asymmetric/api.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 import 'local_store.dart';
 import 'package:paranoia/networking.dart';
 import 'package:paranoia/CreateServer.dart';
@@ -62,6 +63,14 @@ class _Group_CreationState extends State<Group_Creation> {
                   ),
 
                   RaisedButton(
+                    child: Text("Scan Public Fingerprint QR Code"),
+                    color: Colors.greenAccent[400],
+                    onPressed: (){
+
+                    },
+                  ),
+
+                  RaisedButton(
                     child: Text("Save Info"),
                     color: Colors.greenAccent[400],
                     onPressed: (){
@@ -104,7 +113,14 @@ class _Group_CreationState extends State<Group_Creation> {
 
                   ),
 
+                  QrImage(
+                    data: pubFinger.toString(),
+                    size: 320,
+                  ),
                   Text("Public key: $pubFinger")
+
+
+
 
                 ])));
   }
