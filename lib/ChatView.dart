@@ -118,6 +118,7 @@ class _MessageViewState extends State<MessageView>{
 
     //TODO Send message over network for other user
 
+
   }
 
   @override

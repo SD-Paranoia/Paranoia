@@ -19,6 +19,7 @@ class _DeleteChatState extends State<DeleteChatDemo>{
       name: "User_" + id,
       symmetricKey: null,
       serverAddress: "http://127.0.0.1:8080",
+      groupID: "group_id",
     );
   }
 

@@ -21,6 +21,7 @@ class _InsertChatState extends State<InsertChatDemo>{
       name: "User_" + id,
       symmetricKey: CryptKey().genFortuna(32),
       serverAddress: "http://127.0.0.1:8080",
+      groupID: "group_id",
     );
   }
 
