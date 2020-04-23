@@ -31,7 +31,7 @@ Future<http.Response> registerUser(String pubKey, String signature, String ipPor
   http.Response uriResponse;
 
   try {
-    uriResponse = await client.post("https://" +ipPort+"/reg",
+    uriResponse = await client.post("http://" +ipPort+"/reg",
         headers: {"Content-Type": "application/json"},
         body: json.encode({'Public': pubKey, 'Sig': signature})
     );
@@ -56,7 +56,7 @@ Future<http.Response> challengeUser(String fingerPrint, String ipPort) async {
   http.Response uriResponse;
 
   try {
-    uriResponse = await client.post("https://"+ipPort+"/chal",
+    uriResponse = await client.post("http://"+ipPort+"/chal",
         headers: {"Content-Type": "application/json"},
         body: json.encode({'FingerPrint': fingerPrint})
     );

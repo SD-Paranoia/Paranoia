@@ -40,16 +40,17 @@ class _Group_CreationState extends State<Group_Creation> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: Color(0x21ffffff),
         appBar: AppBar(title: Text("Create a Group")),
         body: Center(
             child: Column(
                 children: <Widget>[
 
-                  Text("Idk what this is"),
+                  SizedBox(height: 15),
 
                   RaisedButton(
                     child: Text("Save Info"),
-                    color: Colors.greenAccent[400],
+                    color: Colors.blue,
                     onPressed: (){
                       //TODO -- store in database
                     },
