@@ -24,12 +24,22 @@ class _GenerateKeyState extends State<GenerateKey> {
                 children: <Widget>[
 
                   RaisedButton(
-                    child: Text('Register User'),
+                    child: Text('Register Primary User'),
                     color: Colors.green,
                     onPressed: (){
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => Primary()),
+                      );
+                    },
+                  ),
+                  RaisedButton(
+                    child: Text('Register Secondary User'),
+                    color: Colors.green,
+                    onPressed: (){
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Secondary()),
                       );
                     },
                   ),

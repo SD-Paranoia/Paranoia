@@ -112,6 +112,10 @@ Future getPublicFingerprint() async{
   return fingerPrint;
 }
 
+hashUUID(String uuid){
+  return sha256.convert(utf8.encode(uuid));
+}
+
 //Get the device owner's private key
 Future<RSAPrivateKey> getPrivateKey() async{
   RSAPrivateKey key;

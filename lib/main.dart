@@ -4,7 +4,7 @@ import 'package:paranoia/database_demo.dart';
 import 'local_store.dart';
 import 'package:paranoia/NetworkDemo.dart';
 import 'package:paranoia/CreateServer.dart';
-import 'package:paranoia/Primary.dart';
+import 'package:paranoia/GenerateKey.dart';
 
 void main() {
   runApp(MaterialApp(
@@ -41,7 +41,7 @@ class ParanoiaHome extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => Primary()),
+                  MaterialPageRoute(builder: (context) => GenerateKey()),
                 );
               },
             ),

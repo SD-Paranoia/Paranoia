@@ -3,6 +3,7 @@ import 'package:paranoia/asymmetric_encryption.dart';
 import 'package:paranoia/database_functions.dart';
 import 'package:paranoia/database_functions.dart' as prefix0;
 import 'package:paranoia/encryption_functions.dart';
+import 'package:paranoia/networking.dart';
 import 'package:steel_crypt/PointyCastleN/export.dart';
 
 class ChatView extends StatefulWidget{
@@ -117,6 +118,7 @@ class _MessageViewState extends State<MessageView>{
     });
 
     //TODO Send message over network for other user
+
   }
 
   @override

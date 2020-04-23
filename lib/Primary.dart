@@ -5,7 +5,7 @@ import 'package:paranoia/encryption_functions.dart';
 import 'package:paranoia/file_functions.dart';
 import 'package:http/http.dart' as http;
 import 'package:paranoia/database_demo.dart';
-import 'package:paranoia/group_creation.dart';
+import 'package:paranoia/group_creation_primary.dart';
 import 'package:pointycastle/asymmetric/api.dart';
 import 'local_store.dart';
 import 'package:paranoia/networking.dart';
@@ -127,18 +127,21 @@ class _PrimaryState extends State<Primary> {
                           getPublicKey().then((RSAPublicKey key2) {
                             //Now after signed, send it to server to register user
                             registerUser(pubKey, signedPublic, myController.text);
+                            print(rsaVerify(key2, signedPublic, pubKey));
                           });
                         });
 
-                        //Now, get the user's UUID from the server
-                        getPublicFingerprint().then((var fingerPrint) {
-                          //And send it to the server
-                          challengeUser(fingerPrint.toString(), myController.text);
-                        });
+
+                          //Store the chat and keys into local database
+                          String semkey = generateSymmetricKey();
+                          ChatInfo chat = ChatInfo (pubKey: pubKey, name: name.text, symmetricKey: semkey, serverAddress: myController.text);
+                          insertChatInfo(chat);
+
                       });
+
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Group_Creation()),
+                        MaterialPageRoute(builder: (context) => Group_Creation(myController.text)),
                       );
                     }
                   )
