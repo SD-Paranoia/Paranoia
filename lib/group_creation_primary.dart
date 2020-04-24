@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:paranoia/asymmetric_encryption.dart';
 import 'package:paranoia/database_functions.dart';
@@ -13,8 +15,8 @@ import 'local_store.dart';
 import 'package:paranoia/networking.dart';
 import 'package:paranoia/CreateServer.dart';
 import 'package:paranoia/GenerateKey.dart';
-
-
+//import 'package:qrscan/qrscan.dart' as scanner;
+import 'package:base32/base32.dart';
 class Group_Creation extends StatefulWidget {
   final String ipAddr;
   Group_Creation(this.ipAddr, {Key key}) : super (key: key);
@@ -44,6 +46,8 @@ class _Group_CreationState extends State<Group_Creation> {
       });
   }
 
+  String scannedKey = "default";
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,10 +69,11 @@ class _Group_CreationState extends State<Group_Creation> {
                   RaisedButton(
                     child: Text("Scan Public Fingerprint QR Code"),
                     color: Colors.greenAccent[400],
-                    onPressed: (){
+                    /*onPressed: (){ scanQR();
 
-                    },
+                    },*/
                   ),
+                  Text(scannedKey),
 
                   RaisedButton(
                     child: Text("Save Info"),
@@ -78,6 +83,8 @@ class _Group_CreationState extends State<Group_Creation> {
                       var hashedUUID;
 
                       List members = [pubFinger.toString()];
+
+
 
                       //Pull current user's pubkey from database
                       publicKeyAsString().then((String pubKey) {
@@ -114,7 +121,7 @@ class _Group_CreationState extends State<Group_Creation> {
                   ),
 
                   QrImage(
-                    data: pubFinger.toString(),
+                    data: base32.encodeHexString(pubFinger.toString()),
                     size: 320,
                   ),
                   Text("Public key: $pubFinger")
@@ -124,4 +131,17 @@ class _Group_CreationState extends State<Group_Creation> {
 
                 ])));
   }
+/*
+  Future scanQR() async {
+    try {
+      String key;
+      key = await scanner.scan();
+      setState(() => this.scannedKey = key);
+    } catch (e) {
+      setState(() {
+        this.scannedKey = 'An error $e has occured';
+      });
+    }
+  }
+*/
 }
