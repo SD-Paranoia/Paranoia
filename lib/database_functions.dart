@@ -8,8 +8,9 @@ class  ChatInfo{
   final String name;
   final String symmetricKey;
   final String serverAddress;
+  final String groupID;
 
-  ChatInfo({this.pubKey, this.name, this.symmetricKey, this.serverAddress});
+  ChatInfo({this.pubKey, this.name, this.symmetricKey, this.serverAddress, this.groupID});
 
   Map<String, dynamic> toMap() {
     return {
@@ -17,12 +18,13 @@ class  ChatInfo{
       'name' : name,
       'symmetricKey' : symmetricKey,
       'serverAddress' : serverAddress,
+      'groupID' : groupID,
     };
   }
 
   @override
   String toString(){
-    return 'ChatInfo{pubKey: $pubKey, name: $name, symmetricKey: $symmetricKey, serverAddress: $serverAddress}';
+    return 'ChatInfo{pubKey: $pubKey, name: $name, symmetricKey: $symmetricKey, serverAddress: $serverAddress, groupID: $groupID}';
   }
 }
 
@@ -73,7 +75,7 @@ Future<Database> openChatInfoDB() async{
 
     onCreate: (db, version) {
       return db.execute(
-        "CREATE TABLE chatInfo(pubKey TEXT PRIMARY KEY, name TEXT, symmetricKey TEXT, serverAddress TEXT)",
+        "CREATE TABLE chatInfo(pubKey TEXT PRIMARY KEY, name TEXT, symmetricKey TEXT, serverAddress TEXT, groupID TEXT)",
       );
     },
     version:1,
@@ -110,6 +112,7 @@ Future<List<ChatInfo>> chats() async{
       name: maps[i]['name'],
       symmetricKey: maps[i]['symmetricKey'],
       serverAddress: maps[i]['serverAddress'],
+      groupID: maps[i]['groupID']
     );
   });
 }
@@ -128,7 +131,7 @@ Future<List<Message>> messages() async{
     );
   });
 }
-//A function to retrieve a list of messages based on what converstation they are
+//A function to retrieve a list of messages based on what conversation they are
 // a part of
 Future<List<Message>> messagesByPubKey(String pubKey) async{
   final Database db = await openDB("Message");
