@@ -149,6 +149,7 @@ class _SecondaryState extends State<Secondary> {
     controller.scannedDataStream.listen((scanData) {
       setState(() {
         qrText = scanData;
+        semkey.text = qrText;
       });
     });
   }
