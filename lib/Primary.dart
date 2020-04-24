@@ -11,7 +11,7 @@ import 'local_store.dart';
 import 'package:paranoia/networking.dart';
 import 'package:paranoia/CreateServer.dart';
 import 'package:paranoia/GenerateKey.dart';
-
+import 'package:fluttertoast/fluttertoast.dart';
 
 class Primary extends StatefulWidget {
 
@@ -111,6 +111,13 @@ class _PrimaryState extends State<Primary> {
                     child: Text('Generate keys'),
                     color: Colors.blue,
                     onPressed: () {
+                      FocusScope.of(context).unfocus();
+                      Fluttertoast.showToast(
+                          msg: "Generating key. This may take a minute.",
+                          toastLength: Toast.LENGTH_LONG,
+                          gravity: ToastGravity.BOTTOM,
+                          fontSize: 16.0
+                      );
                       String pubKey = "";
                       //Generate new asymmetric key and store in database
                       generatePublicPrivateKeypair();
@@ -138,6 +145,8 @@ class _PrimaryState extends State<Primary> {
                           insertChatInfo(chat);
 
                       });
+
+                      Fluttertoast.cancel();
 
                       Navigator.push(
                         context,
