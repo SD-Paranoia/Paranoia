@@ -1,4 +1,5 @@
 
+import 'package:paranoia/asymmetric_encryption.dart';
 import'package:paranoia/database_functions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +17,7 @@ class _DeleteChatState extends State<DeleteChatDemo>{
   ChatInfo createNewChat(String id){
     return ChatInfo(
       pubKey: id,
+      fingerprint: createFingerprint(id),
       name: "User_" + id,
       symmetricKey: null,
       serverAddress: "http://127.0.0.1:8080",

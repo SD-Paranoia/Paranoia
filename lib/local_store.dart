@@ -95,6 +95,7 @@ class _LocalStorageState extends State<LocalStorage>{
                   });
                   ChatInfo chat = new ChatInfo(
                       pubKey: publicKey,
+                      fingerprint: createFingerprint(publicKey),
                       name: "User_Jordan_Real_Key",
                       symmetricKey: keyVal,
                       serverAddress: "addr"

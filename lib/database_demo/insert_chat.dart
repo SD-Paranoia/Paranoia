@@ -1,4 +1,5 @@
 
+import 'package:paranoia/asymmetric_encryption.dart';
 import 'package:paranoia/database_functions.dart';
 import 'package:steel_crypt/steel_crypt.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +19,7 @@ class _InsertChatState extends State<InsertChatDemo>{
   ChatInfo createNewChat(String id){
     return ChatInfo(
       pubKey: id,
+      fingerprint: createFingerprint(id),
       name: "User_" + id,
       symmetricKey: CryptKey().genFortuna(32),
       serverAddress: "http://127.0.0.1:8080",

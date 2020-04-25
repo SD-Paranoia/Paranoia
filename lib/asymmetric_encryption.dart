@@ -112,6 +112,12 @@ Future getPublicFingerprint() async{
   return fingerPrint;
 }
 
+String createFingerprint(String publicKey){
+  final key = utf8.encode(publicKey);
+  var fingerprint = sha256.convert(key);
+  return fingerprint.toString();
+}
+
 hashUUID(String uuid){
   return sha256.convert(utf8.encode(uuid));
 }
