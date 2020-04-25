@@ -147,7 +147,7 @@ class DataCollector extends StatelessWidget{
                   });
 
                   //Store chat data into database
-                  ChatInfo chat = ChatInfo (pubKey: pubKey, name: name.text, symmetricKey: text, serverAddress: myController.text);
+                  ChatInfo chat = ChatInfo (pubKey: pubKey, fingerprint: createFingerprint(pubKey), name: name.text, symmetricKey: text, serverAddress: myController.text);
                   insertChatInfo(chat);
                 });
                 Navigator.push(

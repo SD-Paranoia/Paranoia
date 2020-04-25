@@ -1,10 +1,11 @@
+import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:paranoia/asymmetric_encryption.dart';
 import 'package:paranoia/database_functions.dart';
-import 'package:paranoia/database_functions.dart' as prefix0;
 import 'package:paranoia/encryption_functions.dart';
 import 'package:paranoia/networking.dart';
-import 'package:steel_crypt/PointyCastleN/export.dart';
+//import 'package:steel_crypt/PointyCastleN/export.dart';
+import 'package:http/http.dart' as http;
 
 class ChatView extends StatefulWidget{
 
@@ -107,16 +108,48 @@ class _MessageViewState extends State<MessageView>{
         pubKey: widget.chatInfo.pubKey,
         wasSent: 1,
     );
-    //Add the new message to the database
-    insertMessage(newMessage);
 
-    messageTextController.clear();
-    setState(() {
-      widget.messages.add(newMessage);
-      messageCount = messageID;
+    //Get the user's fingerprint
+    Digest fingerPrint = await getPublicFingerprint();
+    //Challenge the user to get the UUID
+    String uuid = await challengeUser(fingerPrint.toString(), widget.chatInfo.serverAddress);
+    //Create the signed challenge
+    String challenge = rsaSign(privateKey, uuid);
+    //Send the message
+    sendMsg(messageText, fingerPrint.toString(), challenge, widget.chatInfo.groupID, widget.chatInfo.serverAddress)
+    .then((http.Response response){
+      if(response.statusCode == 200){
+        //Add the new message to the database
+        insertMessage(newMessage);
+
+        messageTextController.clear();
+        setState(() {
+          widget.messages.add(newMessage);
+          messageCount = messageID;
+        });
+      }
+      else{
+        //Present an alert to retry send
+        showDialog(
+          context: context,
+          builder: (BuildContext context){
+            return AlertDialog(
+              title: Text("Message Failed to Send!"),
+              content: Text("Please try again."),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text("Close"),
+                  onPressed:(){
+                    Navigator.of(context).pop();
+                  },
+                )
+              ],
+            );
+          }
+        );
+      }
     });
 
-    //TODO Send message over network for other user
 
   }
 

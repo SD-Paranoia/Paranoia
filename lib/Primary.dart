@@ -124,7 +124,7 @@ class _PrimaryState extends State<Primary> {
 
                           //Store the chat and keys into local database
                           String semkey = generateSymmetricKey();
-                          ChatInfo chat = ChatInfo (pubKey: pubKey, name: name.text, symmetricKey: semkey, serverAddress: myController.text);
+                          ChatInfo chat = ChatInfo (pubKey: pubKey, fingerprint: createFingerprint(pubKey), name: name.text, symmetricKey: semkey, serverAddress: myController.text);
                           insertChatInfo(chat);
 
                       });

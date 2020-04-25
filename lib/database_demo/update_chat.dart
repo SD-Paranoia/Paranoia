@@ -3,6 +3,7 @@ import'package:paranoia/database_functions.dart';
 import 'package:steel_crypt/steel_crypt.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:paranoia/asymmetric_encryption.dart';
 
 class UpdateChatDemo extends StatefulWidget{
   @override
@@ -17,9 +18,11 @@ class _UpdateChatState extends State<UpdateChatDemo>{
   ChatInfo createNewChat(String id){
     return ChatInfo(
       pubKey: id,
+      fingerprint: createFingerprint(id),
       name: "User_" + id,
       symmetricKey: CryptKey().genFortuna(32),
       serverAddress: "http://127.0.0.1:8080",
+        groupID: "group_id",
     );
   }
 
