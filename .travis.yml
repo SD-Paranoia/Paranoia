@@ -1,0 +1,25 @@
+os:
+  - linux
+addons:
+  apt:
+    # Flutter depends on /usr/lib/x86_64-linux-gnu/libstdc++.so.6 version GLIBCXX_3.4.18
+    sources:
+      - ubuntu-toolchain-r-test # if we don't specify this, the libstdc++6 we get is the wrong version
+    packages:
+      - libstdc++6
+      - fonts-droid
+  sonarcloud:
+    organization: "sd-paranoia"
+    token:
+      secure: "Y7CL13j4G0HAZQ0R7/wzmi6q9cgbUB4SZfve4h0BFnGO3rhqbS+5ULuGR7eWQTBmT2qMdEga9KBUe+ULMXIHTI3H59C5FJStIjyV+K2h9CUenspHbbfXAbrfpnZ/7D4RzgPQ4EaMhHCwLqn1pI0XkfhFCKkxrXgRiK8+u9Jt2GexJ9xIQkUF55lo9zHdDzAS9jEHIySUKNTilWKz48IWBhoNaGR2dwX3TkaBsk0szI0QS4A0Eam5jMzHi/8Nfwp/xUzj/D8BAekchzwpiRjtEvRMMNkKkh6+ccVpSUiIy/SvNSt9OORRwa7odJ22HGOESOpvD5/LfYAJUdBPxgJo1+xqv0fq/MYJruMxX5J/cCYFtLn3HW97Bn3eBqD6i4JjMwvepJR78SyXxkGo2EqpsIF3RRXSM91EwfuRWDSm3FVM0smfK6tYrbZ9tVt0ixcToSYMP8Y4ygGrRBdpbhH0oUcHpmNimSu8DqLOC8a4CEQ54rbFwqqZdJR1w2qv2/7pYeOB6d7TYs9/jLOSkRsfDtv3tCgKHAS7SCmq9s6IOP+ZJz1Trl12jAAm9B7CuIpz0hCMbyEngcAIF6VFeE8W45AQ1nPh8hd89K0dmTCeLPk4GObzzEQrYtyINGBaPm3NoKO12Q+yXHYBteYeS9xuuhhlt+Gh3wMOQGv6bGfaRGI="
+  # encrypted value of your token
+before_script:
+  - git clone https://github.com/flutter/flutter.git -b stable
+  - ./flutter/bin/flutter doctor
+script:
+  # the following command line builds the project, runs the tests with coverage and then execute the SonarCloud analysis
+  - sonar-scanner
+  - ./flutter/bin/flutter test
+cache:
+  directories:
+    - $HOME/.pub-cache
