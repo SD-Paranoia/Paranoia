@@ -134,3 +134,28 @@ Future<http.Response> getMsg(String fingerPrint, String signedChallenge, String 
   }
   return uriResponse;
 }
+
+Future<http.Response> listGroup(String fingerPrint, String signedChallenge, String ipPort) async {
+  var client = http.Client();
+  http.Response uriResponse;
+
+  try {
+    uriResponse = await client.post("https://"+ipPort+"/list",
+        headers: {"Content-Type": "application/json"},
+        body: json.encode({'Fingerprint': fingerPrint,"SignedChallenge":signedChallenge})
+    );
+
+    if (uriResponse.statusCode == 200){
+      //TODO -- do something here
+      String response = uriResponse.toString();
+      print(response);
+    }
+    else {
+      print("Failed to retreive group");
+    }
+  }
+  finally{
+    client.close();
+  }
+  return uriResponse;
+}
