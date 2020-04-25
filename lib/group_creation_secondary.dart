@@ -10,6 +10,8 @@ import 'local_store.dart';
 import 'package:paranoia/networking.dart';
 import 'package:paranoia/CreateServer.dart';
 import 'package:paranoia/GenerateKey.dart';
+import 'package:qr_flutter/qr_flutter.dart';
+import 'package:base32/base32.dart';
 
 
 class Group_Creation_Second extends StatefulWidget {
@@ -72,6 +74,11 @@ class _Group_CreationSState extends State<Group_Creation_Second> {
 
                     },
 
+                  ),
+
+                  QrImage(
+                    data: base32.encodeHexString(pubFinger.toString()),
+                    size: 320,
                   ),
 
                   Text("Public key: $pubFinger")

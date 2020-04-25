@@ -155,7 +155,7 @@ class SemkeyQR extends StatelessWidget{
 
   @override
   Widget build(BuildContext context){
-    print("SYMMETRIC KEY" + sem);
+    //print("SYMMETRIC KEY" + sem);
     return Scaffold(
       appBar: AppBar(
         title: Text('Symmetric Key'),
@@ -166,7 +166,7 @@ class SemkeyQR extends StatelessWidget{
           children: <Widget>[
           QrImage(
           data: base32.encodeString(sem), size: 320,),
-            Text("Symmetric key: " + sem),
+            //Text("Symmetric key: " + sem),
             RaisedButton(
               child: Text('return'),
             onPressed: (){
