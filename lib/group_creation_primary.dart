@@ -46,24 +46,32 @@ class _Group_CreationState extends State<Group_Creation> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: Color(0x21ffffff),
         appBar: AppBar(title: Text("Create a Group")),
         body: Center(
             child: Column(
                 children: <Widget>[
+                  SizedBox(height: 15),
 
-                  Text("Create a Group"),
+                  Text("Create a Group",
+                    style: TextStyle(color: Color(0xffffffff), fontSize: 15),
+                  ),
+                  SizedBox(height: 15),
 
                   TextField(
                     decoration: InputDecoration(
-                        border: InputBorder.none,
+                        border: OutlineInputBorder(),
+                        filled: true,
+                        fillColor: Color(0x10f0f0f0),
                         hintText: 'Public Fingerprint of Secondary user'
                     ),
                     controller: myController,
                   ),
+                  SizedBox(height: 15),
 
                   RaisedButton(
                     child: Text("Save Info"),
-                    color: Colors.greenAccent[400],
+                    color: Colors.blue,
                     onPressed: (){
                       String finger = pubFinger.toString();
                       var hashedUUID;
@@ -104,7 +112,9 @@ class _Group_CreationState extends State<Group_Creation> {
 
                   ),
 
-                  Text("Public key: $pubFinger")
+                  Text("Public key: \n$pubFinger",
+                    style: TextStyle(color: Color(0xffffffff), fontSize: 15),
+                  )
 
                 ])));
   }
