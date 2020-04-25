@@ -58,7 +58,7 @@ class _SecondaryState extends State<Secondary> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-//        appBar: AppBar(title: Text("Secondary Message Creator")),
+        appBar: AppBar(title: Text("Secondary Message Creator")),
         body: Center(
             child: Column(
                 children: <Widget>[
