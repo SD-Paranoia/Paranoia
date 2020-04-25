@@ -1,9 +1,9 @@
 os:
   - linux
-language: dart
-dart:
-  # Install the latest stable release
-  - stable
+#language: dart
+#dart:
+#  # Install the latest stable release
+#  - stable
 addons:
   apt:
     # Flutter depends on /usr/lib/x86_64-linux-gnu/libstdc++.so.6 version GLIBCXX_3.4.18
@@ -19,10 +19,11 @@ addons:
 before_script:
   - git clone https://github.com/flutter/flutter.git -b stable
   - ./flutter/bin/flutter doctor
+  - ./flutter/bin/flutter pub get
 script:
   # the following command line builds the project, runs the tests with coverage and then execute the SonarCloud analysis
-  - sonar-scanner
   - ./flutter/bin/flutter test
+  - sonar-scanner
 cache:
   directories:
     - $HOME/.pub-cache
