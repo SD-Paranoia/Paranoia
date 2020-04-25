@@ -16,7 +16,6 @@ import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:qr_code_scanner/qr_scanner_overlay_shape.dart';
 
 class Secondary extends StatefulWidget {
-
   const Secondary({
     Key key,
   }) : super(key: key);
@@ -28,12 +27,10 @@ class Secondary extends StatefulWidget {
 class _SecondaryState extends State<Secondary> {
   String keyVal;
 
-  final semkey = TextEditingController();
 
   @override
-  void dispose(){
+  void dispose() {
     qrcontroller?.dispose();
-    semkey.dispose();
     super.dispose();
   }
 
@@ -47,132 +44,110 @@ class _SecondaryState extends State<Secondary> {
         backgroundColor: Color(0x21ffffff),
         appBar: AppBar(title: Text("Secondary Message Creator")),
         body: Center(
-            child: Column(
-                children: <Widget>[
-                  Expanded(
-                    child: QRView(
-                      key: qrKey,
-                      onQRViewCreated: _onQRViewCreated,
-                      overlay: QrScannerOverlayShape(
-                        borderColor: Colors.red,
-                        borderRadius: 10,
-                        borderLength: 30,
-                        borderWidth: 10,
-                        cutOutSize: 300,
-                      ),
-                    ),
-
-                    flex: 4,
-                  ),
-                  RaisedButton(
-                    child: Text("Flip Camera"),
-                    color: Colors.greenAccent[400],
-                    onPressed: (){
-                      qrcontroller.flipCamera();
-                    },
-                  ),
-                  RaisedButton(
-                    child: Text("Next"),
-                    color: Colors.greenAccent[400],
-                    onPressed: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => DataCollector(text: qrText)));
-                    },
-                  )
-
-                ])));
+            child: Column(children: <Widget>[
+          Expanded(
+            child: QRView(
+              key: qrKey,
+              onQRViewCreated: _onQRViewCreated,
+              overlay: QrScannerOverlayShape(
+                borderColor: Colors.red,
+                borderRadius: 10,
+                borderLength: 30,
+                borderWidth: 10,
+                cutOutSize: 300,
+              ),
+            ),
+            flex: 4,
+          ),
+          RaisedButton(
+            child: Text("Flip Camera"),
+            color: Colors.blue,
+            onPressed: () {
+              qrcontroller.flipCamera();
+            },
+          ),
+          RaisedButton(
+            child: Text("Next"),
+            color: Colors.blue,
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => DataCollector(text: qrText)));
+            },
+          )
+        ])));
   }
+
   void _onQRViewCreated(QRViewController controller) {
     this.qrcontroller = controller;
     controller.scannedDataStream.listen((scanData) {
       setState(() {
         qrText = scanData;
-        semkey.text = qrText;
+//        semkey.text = qrText;
       });
     });
   }
 }
 
-class DataCollector extends StatelessWidget{
-
+class DataCollector extends StatelessWidget {
   final String text;
   final myController = TextEditingController();
   final name = TextEditingController();
+  final semkey = TextEditingController();
 
   DataCollector({@required this.text});
 
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0x21ffffff),
       appBar: AppBar(title: Text("Secondary User Data Collection")),
       body: Center(
         child: Column(
           children: <Widget>[
-
-            Text("Enter Server Information"),
+            SizedBox(height: 15),
+            Text(
+              "Enter Server Information",
+              style: TextStyle(color: Color(0xffffffff), fontSize: 15),
+            ),
+            SizedBox(height: 15),
             TextField(
               decoration: InputDecoration(
-                  border: InputBorder.none,
-                  hintText: 'URI input (IP:PORT)'
-              ),
+                  border: OutlineInputBorder(),
+                  filled: true,
+                  fillColor: Color(0x10f0f0f0),
+                  hintText: 'URI input (IP:PORT)'),
               controller: myController,
             ),
+            SizedBox(height: 5),
             TextField(
               decoration: InputDecoration(
-                  border: InputBorder.none,
-                  hintText: 'Name of User (optional)'
-              ),
+                  border: OutlineInputBorder(),
+                  filled: true,
+                  fillColor: Color(0x10f0f0f0),
+                  hintText: 'Name of User (optional)'),
               controller: name,
             ),
+            SizedBox(height: 5),
+            TextField(
+              decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  filled: true,
+                  fillColor: Color(0x10f0f0f0),
+                  hintText: 'Symmetric key for encryption (stubbed for TODO)'),
+              controller: semkey,
+            ),
+            SizedBox(height: 15),
             RaisedButton(
               child: Text("Save Info"),
-              color: Colors.greenAccent[400],
-              onPressed: (){
+              color: Colors.blue,
+              onPressed: () {
+                semkey.text = text;
                 //TODO -- register user via network
                 String pubKey = "";
                 //Generate new asymmetric key and store in database
                 generatePublicPrivateKeypair();
-                  Text("Enter Server Information",
-                    style: TextStyle(color: Color(0xffffffff), fontSize: 15),
-                  ),
-                  SizedBox(height: 15),
-                  TextField(
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        filled: true,
-                        fillColor: Color(0x10f0f0f0),
-                        hintText: 'URI input (IP:PORT)'
-                    ),
-                    controller: myController,
-                  ),
-                  SizedBox(height: 5),
-                  TextField(
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        filled: true,
-                        fillColor: Color(0x10f0f0f0),
-                        hintText: 'Name of User (optional)'
-                    ),
-                    controller: name,
-                  ),
-                  SizedBox(height: 5),
-                  TextField(
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        filled: true,
-                        fillColor: Color(0x10f0f0f0),
-                        hintText: 'Symmetric key for encryption (stubbed for TODO)'
-                    ),
-                    controller: semkey,
-                  ),
-                  SizedBox(height: 15),
-                  RaisedButton(
-                    child: Text("Save Info"),
-                    color: Colors.blue,
-                    onPressed: (){
-                      //TODO -- register user via network
-                      String pubKey = "";
-                      //Generate new asymmetric key and store in database
-                      generatePublicPrivateKeypair();
 
                 //Pull current user's pubkey from database
                 publicKeyAsString().then((String retVal) {
@@ -190,15 +165,21 @@ class DataCollector extends StatelessWidget{
                   });
 
                   //Store chat data into database
-                  ChatInfo chat = ChatInfo (pubKey: pubKey, fingerprint: createFingerprint(pubKey), name: name.text, symmetricKey: text, serverAddress: myController.text);
+                  ChatInfo chat = ChatInfo(
+                      pubKey: pubKey,
+                      fingerprint: createFingerprint(pubKey),
+                      name: name.text,
+                      symmetricKey: text,
+                      serverAddress: myController.text);
                   insertChatInfo(chat);
                 });
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => Group_Creation_Second(myController.text)),
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          Group_Creation_Second(myController.text)),
                 );
               },
-
             )
           ],
         ),
