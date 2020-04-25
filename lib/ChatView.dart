@@ -22,6 +22,7 @@ class _ChatViewState extends State<ChatView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: Color(0x21ffffff),
         appBar: AppBar(
           title: Text("Chats"),
     ),
@@ -35,6 +36,7 @@ class _ChatViewState extends State<ChatView> {
                   itemBuilder: (_, int position){
                     final item = snapshot.data[position];
                     return Card(
+                        color: Colors.blue,
                       child: ListTile(
                         title: Text(
                           item.name
@@ -212,6 +214,7 @@ class _MessageViewState extends State<MessageView>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0x21ffffff),
       appBar: AppBar(
         title: Text(widget.chatInfo.name),
       ),
@@ -240,6 +243,7 @@ class _MessageViewState extends State<MessageView>{
                   }
                   else{ //if message was received
                     return Card(
+                      color: Colors.tealAccent,
                       child:Text(
                           decryptMsg(
                               widget.chatInfo.symmetricKey,
@@ -255,7 +259,9 @@ class _MessageViewState extends State<MessageView>{
           // The text entry field
           TextField(
             decoration: InputDecoration(
-                border: InputBorder.none,
+                border: OutlineInputBorder(),
+                filled: true,
+                fillColor: Color(0x10f0f0f0),
                 hintText: 'Write Something...'
             ),
             controller: messageTextController,

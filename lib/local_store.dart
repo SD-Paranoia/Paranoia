@@ -88,7 +88,7 @@ class _LocalStorageState extends State<LocalStorage>{
               ),
               RaisedButton(
                 child: Text('Generate Symmetric Key'),
-                color: Colors.green,
+                color: Colors.blue,
                 onPressed: () async{
                   setState(() {
                     keyVal = generateSymmetricKey();

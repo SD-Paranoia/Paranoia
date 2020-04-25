@@ -47,36 +47,50 @@ class _SecondaryState extends State<Secondary> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: Color(0x21ffffff),
         appBar: AppBar(title: Text("Secondary Message Creator")),
         body: Center(
             child: Column(
                 children: <Widget>[
+                  SizedBox(height: 15),
 
-                  Text("Enter Server Information"),
+                  Text("Enter Server Information",
+                    style: TextStyle(color: Color(0xffffffff), fontSize: 15),
+                  ),
+                  SizedBox(height: 15),
                   TextField(
                     decoration: InputDecoration(
-                        border: InputBorder.none,
+                        border: OutlineInputBorder(),
+                        filled: true,
+                        fillColor: Color(0x10f0f0f0),
                         hintText: 'URI input (IP:PORT)'
                     ),
                     controller: myController,
                   ),
+                  SizedBox(height: 5),
                   TextField(
                     decoration: InputDecoration(
-                        border: InputBorder.none,
+                        border: OutlineInputBorder(),
+                        filled: true,
+                        fillColor: Color(0x10f0f0f0),
                         hintText: 'Name of User (optional)'
                     ),
                     controller: name,
                   ),
+                  SizedBox(height: 5),
                   TextField(
                     decoration: InputDecoration(
-                        border: InputBorder.none,
+                        border: OutlineInputBorder(),
+                        filled: true,
+                        fillColor: Color(0x10f0f0f0),
                         hintText: 'Symmetric key for encryption (stubbed for TODO)'
                     ),
                     controller: semkey,
                   ),
+                  SizedBox(height: 15),
                   RaisedButton(
                     child: Text("Save Info"),
-                    color: Colors.greenAccent[400],
+                    color: Colors.blue,
                     onPressed: (){
                       //TODO -- register user via network
                       String pubKey = "";
