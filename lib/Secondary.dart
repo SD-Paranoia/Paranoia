@@ -27,7 +27,6 @@ class Secondary extends StatefulWidget {
 class _SecondaryState extends State<Secondary> {
   String keyVal;
 
-
   @override
   void dispose() {
     qrcontroller?.dispose();
