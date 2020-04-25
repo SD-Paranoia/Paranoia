@@ -2,6 +2,7 @@
 
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=SD-Paranoia_Paranoia&metric=alert_status)](https://sonarcloud.io/dashboard?id=SD-Paranoia_Paranoia)
 [![Known Vulnerabilities](https://snyk.io/test/github/SD-Paranoia/Paranoia/badge.svg?targetFile=android/app/build.gradle)](https://snyk.io/test/github/SD-Paranoia/Paranoia?targetFile=android/app/build.gradle)
+[![Build Status](https://travis-ci.com/SD-Paranoia/Paranoia.svg?branch=master)](https://travis-ci.com/SD-Paranoia/Paranoia)
 
   
 
