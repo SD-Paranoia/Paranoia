@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:paranoia/asymmetric_encryption.dart';
 import 'package:paranoia/database_functions.dart';
@@ -7,10 +8,13 @@ import 'package:http/http.dart' as http;
 import 'package:paranoia/database_demo.dart';
 import 'package:paranoia/group_creation_primary.dart';
 import 'package:pointycastle/asymmetric/api.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 import 'local_store.dart';
 import 'package:paranoia/networking.dart';
 import 'package:paranoia/CreateServer.dart';
 import 'package:paranoia/GenerateKey.dart';
+import 'package:base32/base32.dart';
+import 'package:convert_hex/convert_hex.dart';
 
 
 class Primary extends StatefulWidget {
@@ -124,6 +128,9 @@ class _PrimaryState extends State<Primary> {
 
                           //Store the chat and keys into local database
                           String semkey = generateSymmetricKey();
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => SemkeyQR(sem: semkey,)),);
                           ChatInfo chat = ChatInfo (pubKey: pubKey, name: name.text, symmetricKey: semkey, serverAddress: myController.text);
                           insertChatInfo(chat);
 
@@ -139,3 +146,39 @@ class _PrimaryState extends State<Primary> {
                 ])));
   }
 }
+
+class SemkeyQR extends StatelessWidget{
+
+  final String sem;
+
+  SemkeyQR({@required this.sem});
+
+  @override
+  Widget build(BuildContext context){
+    print("SYMMETRIC KEY" + sem);
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Symmetric Key'),
+      ),
+      body:
+      Center(
+        child: Column(
+          children: <Widget>[
+          QrImage(
+          data: base32.encodeString(sem), size: 320,),
+            Text("Symmetric key: " + sem),
+            RaisedButton(
+              child: Text('return'),
+            onPressed: (){
+            Navigator.pop(context);
+            },
+            )
+          ]
+
+          ),
+        )
+
+      );
+  }
+}
+

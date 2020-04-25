@@ -64,6 +64,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.1"
+  convert_hex:
+    dependency: "direct main"
+    description:
+      name: convert_hex
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.7"
   crypto:
     dependency: "direct main"
     description:
