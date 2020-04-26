@@ -18,8 +18,9 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:base32/base32.dart';
 
 class SecondQRScanner extends StatefulWidget {
-  final String pubKey;
-  const SecondQRScanner(this.pubKey, {
+  final ChatInfo chat;
+  final String pubQRKey;
+  const SecondQRScanner(this.chat, this.pubQRKey, {
     Key key,
   }) : super(key: key);
 
@@ -71,7 +72,7 @@ class _SecondQRState extends State<SecondQRScanner> {
         Navigator.push(
           context,
           MaterialPageRoute(
-          builder: (context) => Group_Creation_Second(qrPublic))
+          builder: (context) => Group_Creation_Second(widget.chat, qrPublic))
           );
 //        semkey.text = qrPublic;
       });

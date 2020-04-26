@@ -17,7 +17,8 @@ import 'package:base32/base32.dart';
 
 class Group_Creation_Second extends StatefulWidget {
   final ChatInfo chat;
-  Group_Creation_Second(this.chat, {Key key}) : super (key: key);
+  final String pubQRKey;
+  Group_Creation_Second(this.chat, this.pubQRKey, {Key key}) : super (key: key);
 
   @override
   _Group_CreationSState createState() => _Group_CreationSState();
@@ -44,16 +45,16 @@ class _Group_CreationSState extends State<Group_Creation_Second> {
       });
     });
   }
+  
 
   @override
   Widget build(BuildContext context) {
-    myController.text = widget.chat.pubKey;
+    myController.text = widget.pubQRKey;
     return Scaffold(
         appBar: AppBar(title: Text("Create a Group")),
         body: Center(
             child: Column(
                 children: <Widget>[
-
                   SizedBox(height: 15),
                   Text("Create a Group"),
 
@@ -74,7 +75,7 @@ class _Group_CreationSState extends State<Group_Creation_Second> {
                         context,
                         MaterialPageRoute(
                           builder: (context) =>
-                          SecondQRScanner("")),
+                          SecondQRScanner(widget.chat, widget.pubQRKey)),
                       );
                     },
 
@@ -92,7 +93,7 @@ class _Group_CreationSState extends State<Group_Creation_Second> {
                     color: Colors.blue,
                     onPressed: (){
                       ChatInfo newChat = ChatInfo(
-                          pubKey: widget.chat.pubKey,
+                          pubKey: myController.text,
                           fingerprint: createFingerprint(widget.chat.pubKey),
                           name: widget.chat.name,
                           symmetricKey: widget.chat.symmetricKey,

@@ -172,15 +172,15 @@ class DataCollector extends StatelessWidget {
                       name: name.text,
                       symmetricKey: text,
                       serverAddress: myController.text,
-                      groupID: groupIDField.text
+                      groupID: ""
                   );
-                  insertChatInfo(chat);
+                  //insertChatInfo(chat);
                 });
                 Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) =>
-                          Group_Creation_Second(chat)),
+                          Group_Creation_Second(chat, "")),
                 );
               },
             )
