@@ -34,6 +34,7 @@ class _Group_CreationState extends State<Group_Creation> {
 
   final myController = TextEditingController();
   var pubFinger;
+  String newGroupID;
   @override
   void dispose(){
     myController.dispose();
@@ -127,6 +128,9 @@ class _Group_CreationState extends State<Group_Creation> {
                                   groupID: groupId,
                                 );
                                 insertChatInfo(chat);
+                                setState(() {
+                                  newGroupID = chat.groupID;
+                                });
                               });
 
                             });
@@ -142,7 +146,7 @@ class _Group_CreationState extends State<Group_Creation> {
 
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => PubkeyQR(pub: finger,)),);
+                        MaterialPageRoute(builder: (context) => PubkeyQR(pub: finger,newGroupID: newGroupID)),);
                       },
 
                   ),
@@ -185,8 +189,8 @@ class _Group_CreationState extends State<Group_Creation> {
 class PubkeyQR extends StatelessWidget{
 
   final String pub;
-
-  PubkeyQR({@required this.pub});
+  final String newGroupID;
+  PubkeyQR({@required this.pub, @required this.newGroupID});
 
   @override
   Widget build(BuildContext context){
@@ -199,7 +203,9 @@ class PubkeyQR extends StatelessWidget{
           child: Column(
               children: <Widget>[
                 QrImage(
-                  data: base32.encodeString(pub), size: 320,),
+                  data: base32.encodeString(pub), size: 320,
+                ),
+                Text("GROUP ID: $newGroupID\n"),
                 RaisedButton(
                   child: Text('Home'),
                   onPressed: (){
