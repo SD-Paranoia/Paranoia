@@ -127,10 +127,11 @@ class _Group_CreationState extends State<Group_Creation> {
                                   serverAddress: widget.chat.serverAddress,
                                   groupID: groupId,
                                 );
-                                insertChatInfo(chat);
                                 setState(() {
                                   newGroupID = chat.groupID;
                                 });
+                                insertChatInfo(chat);
+
                               });
 
                             });
