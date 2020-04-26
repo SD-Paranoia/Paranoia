@@ -95,6 +95,7 @@ class DataCollector extends StatelessWidget {
   final myController = TextEditingController();
   final name = TextEditingController();
   final semkey = TextEditingController();
+  final groupIDField = TextEditingController();
 
   DataCollector({@required this.text});
 
@@ -104,7 +105,7 @@ class DataCollector extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: Text("Secondary User Data Collection")),
       body: Center(
-        child: Column(
+        child: ListView(
           children: <Widget>[
             SizedBox(height: 15),
             Text(
@@ -134,6 +135,14 @@ class DataCollector extends StatelessWidget {
                   filled: true,
                   hintText: 'Symmetric key for encryption (stubbed for TODO)'),
               controller: semkey,
+            ),
+            SizedBox(height: 5),
+            TextField(
+              decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  filled: true,
+                  hintText: 'Group ID'),
+              controller: groupIDField,
             ),
             SizedBox(height: 15),
             RaisedButton(
@@ -167,7 +176,9 @@ class DataCollector extends StatelessWidget {
                       fingerprint: createFingerprint(pubKey),
                       name: name.text,
                       symmetricKey: text,
-                      serverAddress: myController.text);
+                      serverAddress: myController.text,
+                      groupID: groupIDField.text
+                  );
                   insertChatInfo(chat);
                 });
                 Navigator.push(
