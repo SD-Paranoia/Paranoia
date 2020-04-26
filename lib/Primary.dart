@@ -114,15 +114,7 @@ class _PrimaryState extends State<Primary> {
                     color: Colors.blue,
                     onPressed: () {
                       FocusScope.of(context).unfocus();
-                      Fluttertoast.showToast(
-                          msg: "Generating key. This may take a minute.",
-                          toastLength: Toast.LENGTH_LONG,
-                          gravity: ToastGravity.BOTTOM,
-                          fontSize: 16.0
-                      );
                       String pubKey = "";
-                      //Generate new asymmetric key and store in database
-                      generatePublicPrivateKeypair();
 
                       //Pull current user's pubkey from database
                       publicKeyAsString().then((String retVal) {
