@@ -23,8 +23,8 @@ import 'package:base32/base32.dart';
 
 
 class Group_Creation extends StatefulWidget {
-  final String ipAddr;
-  Group_Creation(this.ipAddr, {Key key}) : super (key: key);
+  ChatInfo chat;
+  Group_Creation(this.chat, {Key key}) : super (key: key);
 
   @override
   _Group_CreationState createState() => _Group_CreationState();
@@ -110,7 +110,7 @@ class _Group_CreationState extends State<Group_Creation> {
                         //Get the private key
                         getPrivateKey().then((RSAPrivateKey privKey) {
                           //First, challenge the user
-                          challengeUser(pubFinger.toString(), widget.ipAddr).then((UUID){
+                          challengeUser(pubFinger.toString(), widget.chat.serverAddress).then((UUID){
                             //hash the uuid
                             hashedUUID = hashUUID(UUID);
 
@@ -120,8 +120,16 @@ class _Group_CreationState extends State<Group_Creation> {
                             //Get the public key in PEM format
                             getPublicKey().then((RSAPublicKey key2){
                               //Create the group on the server
-                              createGroup(members, finger, signedChallenge, widget.ipAddr).then((n){
-
+                              createGroup(members, finger, signedChallenge, widget.chat.serverAddress).then((groupId){
+                                ChatInfo chat = ChatInfo(
+                                  pubKey: widget.chat.pubKey ,
+                                  fingerprint: widget.chat.fingerprint,
+                                  name: widget.chat.name,
+                                  symmetricKey: widget.chat.symmetricKey,
+                                  serverAddress: widget.chat.serverAddress,
+                                  groupID: groupId,
+                                );
+                                insertChatInfo(chat);
                               });
 
                             });

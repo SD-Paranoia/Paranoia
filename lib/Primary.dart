@@ -79,6 +79,7 @@ class _PrimaryState extends State<Primary> {
   }
 
   String keyVal;
+  ChatInfo chat;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -145,11 +146,11 @@ class _PrimaryState extends State<Primary> {
                           if (name.text == ""){
                             name.text = pubKey.toString().substring(100,108);
                           }
-                          ChatInfo chat = ChatInfo (pubKey: pubKey, fingerprint: createFingerprint(pubKey), name: name.text, symmetricKey: semkey, serverAddress: myController.text);
+                          chat = ChatInfo (pubKey: pubKey, fingerprint: createFingerprint(pubKey), name: name.text, symmetricKey: semkey, serverAddress: myController.text);
                           Navigator.push(
                               context,
                               MaterialPageRoute(builder: (context) => SemkeyQR(sem: semkey,)),);
-                          insertChatInfo(chat);
+
 
                       });
 
@@ -157,7 +158,7 @@ class _PrimaryState extends State<Primary> {
 
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Group_Creation(myController.text)),
+                        MaterialPageRoute(builder: (context) => Group_Creation(chat)),
                       );
                     }
                   )
