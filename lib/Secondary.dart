@@ -14,6 +14,7 @@ import 'package:paranoia/CreateServer.dart';
 import 'package:paranoia/GenerateKey.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:qr_code_scanner/qr_scanner_overlay_shape.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class Secondary extends StatefulWidget {
   const Secondary({
@@ -34,27 +35,20 @@ class _SecondaryState extends State<Secondary> {
   }
 
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
-  var qrText = "";
+  var qrSym = "";
   QRViewController qrcontroller;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Color(0x21ffffff),
-        appBar: AppBar(title: Text("Secondary Message Creator")),
+        appBar: AppBar(title: Text("Scan Symmetric QR Code")),
         body: Center(
             child: Column(children: <Widget>[
           Expanded(
             child: QRView(
               key: qrKey,
               onQRViewCreated: _onQRViewCreated,
-              overlay: QrScannerOverlayShape(
-                borderColor: Colors.red,
-                borderRadius: 10,
-                borderLength: 30,
-                borderWidth: 10,
-                cutOutSize: 300,
-              ),
             ),
             flex: 4,
           ),
@@ -72,7 +66,7 @@ class _SecondaryState extends State<Secondary> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => DataCollector(text: qrText)));
+                      builder: (context) => DataCollector(text: qrSym)));
             },
           )
         ])));
@@ -82,8 +76,14 @@ class _SecondaryState extends State<Secondary> {
     this.qrcontroller = controller;
     controller.scannedDataStream.listen((scanData) {
       setState(() {
-        qrText = scanData;
-//        semkey.text = qrText;
+        qrSym = scanData;
+        Fluttertoast.showToast(
+          msg: "Symmetric key scanned, click next",
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.BOTTOM,
+          fontSize: 16.0
+        );
+//        semkey.text = qrSym;
       });
     });
   }

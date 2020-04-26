@@ -76,13 +76,6 @@ class _Group_CreationState extends State<Group_Creation> {
                     child: QRView(
                       key: qrKey,
                       onQRViewCreated: _onQRViewCreated,
-                      overlay: QrScannerOverlayShape(
-                      borderColor: Colors.red,
-                      borderRadius: 10,
-                      borderLength: 30,
-                      borderWidth: 10,
-                      cutOutSize: 300,
-                      ),
                     ),
                   ),
                   RaisedButton(

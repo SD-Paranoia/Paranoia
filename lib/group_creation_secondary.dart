@@ -64,7 +64,14 @@ class _Group_CreationSState extends State<Group_Creation_Second> {
                   ),
 
                   SizedBox(height: 15),
+                  RaisedButton(
+                    child: Text("Scan QR Code"),
+                    color: Colors.blue,
+                    onPressed: (){
+                      //Switch to scanner
+                    },
 
+                  ),
                   RaisedButton(
                     child: Text("Save Info"),
                     color: Colors.blue,
