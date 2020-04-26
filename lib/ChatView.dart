@@ -75,7 +75,7 @@ class MessageView extends StatefulWidget{
 class _MessageViewState extends State<MessageView>{
 
   final messageTextController = TextEditingController();
-  List<Message> messageList;
+  List<Message> messageList = new List<Message>();
   int messageCount;
   var privateKey;
   var fingerPrint;
@@ -103,7 +103,7 @@ class _MessageViewState extends State<MessageView>{
             messageCount = allMessages.length;
           });
           getMessages().then((void retVal){
-            messagesByFingerprint(fingerPrint).then((List<Message> messages){
+            messagesByFingerprint(fingerPrint.toString()).then((List<Message> messages){
               setState(() {
                 messageList = messages;
               });
