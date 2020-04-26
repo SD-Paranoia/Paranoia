@@ -48,7 +48,6 @@ class _Group_CreationSState extends State<Group_Creation_Second> {
   Widget build(BuildContext context) {
     myController.text = widget.pubKey;
     return Scaffold(
-        backgroundColor: Color(0x21ffffff),
         appBar: AppBar(title: Text("Create a Group")),
         body: Center(
             child: Column(
