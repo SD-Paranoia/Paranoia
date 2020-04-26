@@ -82,21 +82,19 @@ class _PrimaryState extends State<Primary> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Color(0x21ffffff),
         appBar: AppBar(title: Text("User Registration")),
         body: Center(
             child: Column(
                 children: <Widget>[
                   SizedBox(height: 15),
                   Text("Enter Server and Chat Information",
-                    style: TextStyle(color: Color(0xffffffff), fontSize: 15),
+                    style: TextStyle(fontSize: 15),
                   ),
                   SizedBox(height: 15),
                   TextField(
                     decoration: InputDecoration(
                         border: OutlineInputBorder(),
                         filled: true,
-                        fillColor: Color(0x10f0f0f0),
                         hintText: 'URI input (IP:PORT)'
                     ),
                     controller: myController,
@@ -106,7 +104,6 @@ class _PrimaryState extends State<Primary> {
                     decoration: InputDecoration(
                         border: OutlineInputBorder(),
                         filled: true,
-                        fillColor: Color(0x10f0f0f0),
                         hintText: 'Name of User (optional)'
                     ),
                     controller: name,

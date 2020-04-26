@@ -43,7 +43,6 @@ class _SecondaryState extends State<Secondary> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Color(0x21ffffff),
         appBar: AppBar(title: Text("Scan Symmetric QR Code")),
         body: Center(
             child: Column(children: <Widget>[
@@ -103,7 +102,6 @@ class DataCollector extends StatelessWidget {
   Widget build(BuildContext context) {
     semkey.text = text;
     return Scaffold(
-      backgroundColor: Color(0x21ffffff),
       appBar: AppBar(title: Text("Secondary User Data Collection")),
       body: Center(
         child: Column(
@@ -111,14 +109,13 @@ class DataCollector extends StatelessWidget {
             SizedBox(height: 15),
             Text(
               "Enter Server Information",
-              style: TextStyle(color: Color(0xffffffff), fontSize: 15),
+              style: TextStyle(fontSize: 15),
             ),
             SizedBox(height: 15),
             TextField(
               decoration: InputDecoration(
                   border: OutlineInputBorder(),
                   filled: true,
-                  fillColor: Color(0x10f0f0f0),
                   hintText: 'URI input (IP:PORT)'),
               controller: myController,
             ),
@@ -127,7 +124,6 @@ class DataCollector extends StatelessWidget {
               decoration: InputDecoration(
                   border: OutlineInputBorder(),
                   filled: true,
-                  fillColor: Color(0x10f0f0f0),
                   hintText: 'Name of User (optional)'),
               controller: name,
             ),
@@ -136,7 +132,6 @@ class DataCollector extends StatelessWidget {
               decoration: InputDecoration(
                   border: OutlineInputBorder(),
                   filled: true,
-                  fillColor: Color(0x10f0f0f0),
                   hintText: 'Symmetric key for encryption (stubbed for TODO)'),
               controller: semkey,
             ),
