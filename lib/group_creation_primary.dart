@@ -12,7 +12,8 @@ import 'local_store.dart';
 import 'package:paranoia/networking.dart';
 import 'package:paranoia/CreateServer.dart';
 import 'package:paranoia/GenerateKey.dart';
-
+import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:qr_code_scanner/qr_scanner_overlay_shape.dart';
 
 class Group_Creation extends StatefulWidget {
   final String ipAddr;
@@ -29,6 +30,7 @@ class _Group_CreationState extends State<Group_Creation> {
   @override
   void dispose(){
     myController.dispose();
+    qrcontroller?.dispose();
     super.dispose();
   }
 
@@ -42,6 +44,10 @@ class _Group_CreationState extends State<Group_Creation> {
         });
       });
   }
+
+  final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
+  var qrText = "";
+  QRViewController qrcontroller;
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +63,27 @@ class _Group_CreationState extends State<Group_Creation> {
                     style: TextStyle(color: Color(0xffffffff), fontSize: 15),
                   ),
                   SizedBox(height: 15),
-
+                  Expanded(
+                    child: QRView(
+                      key: qrKey,
+                      onQRViewCreated: _onQRViewCreated,
+                      overlay: QrScannerOverlayShape(
+                      borderColor: Colors.red,
+                      borderRadius: 10,
+                      borderLength: 30,
+                      borderWidth: 10,
+                      cutOutSize: 300,
+                      ),
+                    ),
+                  ),
+                  RaisedButton(
+                    child: Text("Flip Camera"),
+                    color: Colors.blue,
+                    onPressed: () {
+                      qrcontroller.flipCamera();
+                    },
+                  ),
+                  
                   TextField(
                     decoration: InputDecoration(
                         border: OutlineInputBorder(),
@@ -117,5 +143,14 @@ class _Group_CreationState extends State<Group_Creation> {
                   )
 
                 ])));
+  }
+  void _onQRViewCreated(QRViewController controller) {
+    this.qrcontroller = controller;
+    controller.scannedDataStream.listen((scanData) {
+      setState(() {
+        qrText = scanData;
+        myController.text = qrText;
+      });
+    });
   }
 }
