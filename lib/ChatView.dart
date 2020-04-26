@@ -99,14 +99,21 @@ class _MessageViewState extends State<MessageView>{
           privateKey = key;
         });
         messages().then((List<Message> allMessages){
-          setState(() {
-            messageCount = allMessages.length;
-          });
+          if(allMessages != null) {
+            setState(() {
+              messageCount = allMessages.length;
+            });
+          }
+          else{
+            messageCount = 0;
+          }
           getMessages().then((void retVal){
             messagesByFingerprint(fingerPrint.toString()).then((List<Message> messages){
-              setState(() {
-                messageList = messages;
-              });
+              if(messages != null){
+                setState(() {
+                  messageList = messages;
+                });
+              }
             });//messagesByFingerprint
           });//getMessages()
         });//messages()
@@ -123,14 +130,16 @@ class _MessageViewState extends State<MessageView>{
     .then((http.Response response){
       if(response.statusCode == 200){
         Map<String, dynamic> jsonObj = jsonDecode(response.body);
-        for(var item in jsonObj["Msgs"]){
-          Message newMessage = Message(
-            messageID: ++messageCount,
-            fingerprint: item["From"],
-            wasSent: 0,
-            messageText: item["Content"]
-          );
-          insertMessage(newMessage);
+        if(jsonObj["Msgs"] != null) {
+          for (var item in jsonObj["Msgs"]) {
+            Message newMessage = Message(
+                messageID: ++messageCount,
+                fingerprint: item["From"],
+                wasSent: 0,
+                messageText: item["Content"]
+            );
+            insertMessage(newMessage);
+          }
         }
       }
       else{
