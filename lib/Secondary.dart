@@ -15,6 +15,7 @@ import 'package:paranoia/GenerateKey.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:qr_code_scanner/qr_scanner_overlay_shape.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:base32/base32.dart';
 
 class Secondary extends StatefulWidget {
   const Secondary({
@@ -76,7 +77,7 @@ class _SecondaryState extends State<Secondary> {
     this.qrcontroller = controller;
     controller.scannedDataStream.listen((scanData) {
       setState(() {
-        qrSym = scanData;
+        qrSym =  base32.decodeAsHexString(scanData);
         Fluttertoast.showToast(
           msg: "Symmetric key scanned, click next",
           toastLength: Toast.LENGTH_LONG,
@@ -99,6 +100,7 @@ class DataCollector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    semkey.text = text;
     return Scaffold(
       backgroundColor: Color(0x21ffffff),
       appBar: AppBar(title: Text("Secondary User Data Collection")),

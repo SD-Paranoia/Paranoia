@@ -15,6 +15,7 @@ import 'package:paranoia/GenerateKey.dart';
 import 'package:paranoia/group_creation_secondary.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:base32/base32.dart';
 
 class SecondQRScanner extends StatefulWidget {
   final String ipAddr;
@@ -68,7 +69,7 @@ class _SecondQRState extends State<SecondQRScanner> {
     this.qrcontroller = controller;
     controller.scannedDataStream.listen((scanData) {
       setState(() {
-        qrPublic = scanData;
+        qrPublic = base32.decodeAsHexString(scanData);
         Navigator.push(
           context,
           MaterialPageRoute(
