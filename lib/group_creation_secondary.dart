@@ -46,11 +46,13 @@ class _Group_CreationSState extends State<Group_Creation_Second> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: Color(0x21ffffff),
         appBar: AppBar(title: Text("Create a Group")),
         body: Center(
             child: Column(
                 children: <Widget>[
 
+                  SizedBox(height: 15),
                   Text("Create a Group"),
 
                   TextField(
@@ -61,9 +63,11 @@ class _Group_CreationSState extends State<Group_Creation_Second> {
                     controller: myController,
                   ),
 
+                  SizedBox(height: 15),
+
                   RaisedButton(
                     child: Text("Save Info"),
-                    color: Colors.greenAccent[400],
+                    color: Colors.blue,
                     onPressed: (){
                       //Store in database
 

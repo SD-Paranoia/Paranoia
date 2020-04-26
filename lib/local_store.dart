@@ -88,13 +88,14 @@ class _LocalStorageState extends State<LocalStorage>{
               ),
               RaisedButton(
                 child: Text('Generate Symmetric Key'),
-                color: Colors.green,
+                color: Colors.blue,
                 onPressed: () async{
                   setState(() {
                     keyVal = generateSymmetricKey();
                   });
                   ChatInfo chat = new ChatInfo(
                       pubKey: publicKey,
+                      fingerprint: createFingerprint(publicKey),
                       name: "User_Jordan_Real_Key",
                       symmetricKey: keyVal,
                       serverAddress: "addr"

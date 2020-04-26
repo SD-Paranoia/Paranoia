@@ -5,46 +5,50 @@ import 'package:sqflite/sqflite.dart';
 
 class  ChatInfo{
   final String pubKey;
+  final String fingerprint;
   final String name;
   final String symmetricKey;
   final String serverAddress;
+  final String groupID;
 
-  ChatInfo({this.pubKey, this.name, this.symmetricKey, this.serverAddress});
+  ChatInfo({this.pubKey, this.fingerprint, this.name, this.symmetricKey, this.serverAddress, this.groupID});
 
   Map<String, dynamic> toMap() {
     return {
       'pubKey' : pubKey,
+      'fingerprint' : fingerprint,
       'name' : name,
       'symmetricKey' : symmetricKey,
       'serverAddress' : serverAddress,
+      'groupID' : groupID,
     };
   }
 
   @override
   String toString(){
-    return 'ChatInfo{pubKey: $pubKey, name: $name, symmetricKey: $symmetricKey, serverAddress: $serverAddress}';
+    return 'ChatInfo{pubKey: $pubKey, fingerprint: $fingerprint, name: $name, symmetricKey: $symmetricKey, serverAddress: $serverAddress, groupID: $groupID}';
   }
 }
 
 class Message{
   final int messageID;
-  final String pubKey;
+  final String fingerprint;
   final int wasSent;
   final String messageText;
 
-  Message({this.messageID, this.pubKey, this.wasSent, this.messageText});
+  Message({this.messageID, this.fingerprint, this.wasSent, this.messageText});
 
   Map<String, dynamic> toMap() {
     return {
       'messageID' : messageID,
-      'pubKey' : pubKey,
+      'pubKey' : fingerprint,
       'wasSent' : wasSent,
       'messageText' : messageText,
     };
   }
   @override
   String toString(){
-    return 'Message{messageID: $messageID, pubKey: $pubKey, wasSent: $wasSent, messageText: $messageText}';
+    return 'Message{messageID: $messageID, fingerprint: $fingerprint, wasSent: $wasSent, messageText: $messageText}';
   }
 
 }
@@ -73,7 +77,7 @@ Future<Database> openChatInfoDB() async{
 
     onCreate: (db, version) {
       return db.execute(
-        "CREATE TABLE chatInfo(pubKey TEXT PRIMARY KEY, name TEXT, symmetricKey TEXT, serverAddress TEXT)",
+        "CREATE TABLE chatInfo(pubKey TEXT PRIMARY KEY, fingerprint TEXT, name TEXT, symmetricKey TEXT, serverAddress TEXT, groupID TEXT)",
       );
     },
     version:1,
@@ -89,7 +93,7 @@ Future<Database> openMessageDB() async{
 
     onCreate: (db, version) {
       return db.execute(
-        "CREATE TABLE message(messageID INTEGER PRIMARY KEY, pubKey TEXT, wasSent INTEGER, messageText TEXT)",
+        "CREATE TABLE message(messageID INTEGER PRIMARY KEY, fingerprint TEXT, wasSent INTEGER, messageText TEXT)",
       );
     },
     version:1,
@@ -107,9 +111,11 @@ Future<List<ChatInfo>> chats() async{
   return List.generate(maps.length, (i) {
     return ChatInfo(
       pubKey: maps[i]['pubKey'],
+      fingerprint: maps[i]['fingerprint'],
       name: maps[i]['name'],
       symmetricKey: maps[i]['symmetricKey'],
       serverAddress: maps[i]['serverAddress'],
+      groupID: maps[i]['groupID']
     );
   });
 }
@@ -122,29 +128,29 @@ Future<List<Message>> messages() async{
   return List.generate(maps.length, (i) {
     return Message(
       messageID: maps[i]['messageID'],
-      pubKey: maps[i]['pubKey'],
+      fingerprint: maps[i]['fingerprint'],
       wasSent: maps[i]['wasSent'],
       messageText: maps[i]['messageText'],
     );
   });
 }
-//A function to retrieve a list of messages based on what converstation they are
+//A function to retrieve a list of messages based on what conversation they are
 // a part of
-Future<List<Message>> messagesByPubKey(String pubKey) async{
+Future<List<Message>> messagesByFingerprint(String fingerprint) async{
   final Database db = await openDB("Message");
   //Query for the messages with the provided pubKey
   final List<Map<String, dynamic>> maps = await db.query(
     'message',
     //Ensure matching public key
-    where: "pubKey = ?",
+    where: "fingerprint = ?",
     //Pass the pubKey as a whereArg to prevent SQL injection
-    whereArgs: [pubKey],
+    whereArgs: [fingerprint],
   );
 
   return List.generate(maps.length, (i) {
     return Message(
       messageID: maps[i]['messageID'],
-      pubKey: maps[i]['pubKey'],
+      fingerprint: maps[i]['fingerprint'],
       wasSent: maps[i]['wasSent'],
       messageText: maps[i]['messageText'],
     );

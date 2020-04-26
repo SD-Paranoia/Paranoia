@@ -1,10 +1,10 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:paranoia/asymmetric_encryption.dart';
 import 'package:paranoia/database_functions.dart';
-import 'package:paranoia/database_functions.dart' as prefix0;
 import 'package:paranoia/encryption_functions.dart';
 import 'package:paranoia/networking.dart';
-import 'package:steel_crypt/PointyCastleN/export.dart';
+import 'package:http/http.dart' as http;
 
 class ChatView extends StatefulWidget{
 
@@ -22,6 +22,7 @@ class _ChatViewState extends State<ChatView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: Color(0x21ffffff),
         appBar: AppBar(
           title: Text("Chats"),
     ),
@@ -35,6 +36,7 @@ class _ChatViewState extends State<ChatView> {
                   itemBuilder: (_, int position){
                     final item = snapshot.data[position];
                     return Card(
+                        color: Colors.blue,
                       child: ListTile(
                         title: Text(
                           item.name
@@ -42,12 +44,10 @@ class _ChatViewState extends State<ChatView> {
                         onTap: (){
                           //If we tap on a chat, it will take us to the messages
                           // associated with that chat
-                          messagesByPubKey(item.pubKey).then((List<Message> messageList){
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => MessageView(messages: messageList, chatInfo: item)),
-                            );
-                          });
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => MessageView(chatInfo: item)),
+                          );
                         },
                       )
                     );
@@ -63,10 +63,9 @@ class _ChatViewState extends State<ChatView> {
 }
 
 class MessageView extends StatefulWidget{
-  final List<Message> messages;
   final ChatInfo chatInfo;
   //Require a list of messages to display
-  MessageView({@required this.messages, @required this.chatInfo});
+  MessageView({@required this.chatInfo});
 
   @override
   _MessageViewState createState() => new _MessageViewState();
@@ -76,7 +75,10 @@ class MessageView extends StatefulWidget{
 class _MessageViewState extends State<MessageView>{
 
   final messageTextController = TextEditingController();
+  List<Message> messageList = new List<Message>();
   int messageCount;
+  var privateKey;
+  var fingerPrint;
   //Needed to cleanup the text editing controller and free
   // its resources
   @override
@@ -86,43 +88,142 @@ class _MessageViewState extends State<MessageView>{
   }
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
-    messages().then((List<Message> messagesList){
+    getPublicFingerprint().then((var fing){
       setState(() {
-        messageCount = messagesList.length;
+        fingerPrint = fing;
       });
+      getPrivateKey().then((var key){
+        setState(() {
+          privateKey = key;
+        });
+        messages().then((List<Message> allMessages){
+          if(allMessages != null) {
+            setState(() {
+              messageCount = allMessages.length;
+            });
+          }
+          else{
+            messageCount = 0;
+          }
+          getMessages().then((void retVal){
+            messagesByFingerprint(fingerPrint.toString()).then((List<Message> messages){
+              if(messages != null){
+                setState(() {
+                  messageList = messages;
+                });
+              }
+            });//messagesByFingerprint
+          });//getMessages()
+        });//messages()
+      });//getPrivateKey()
+    });//getPublicFingerprint()
+  }
+
+  Future<void> getMessages()async{
+    //Challenge the user to get the UUID
+    String uuid = await challengeUser(fingerPrint.toString(), widget.chatInfo.serverAddress);
+    //Create the signed challenge
+    String challenge = rsaSign(privateKey, uuid);
+    getMsg(fingerPrint.toString(), challenge, widget.chatInfo.serverAddress)
+    .then((http.Response response){
+      if(response.statusCode == 200){
+        Map<String, dynamic> jsonObj = jsonDecode(response.body);
+        if(jsonObj["Msgs"] != null) {
+          for (var item in jsonObj["Msgs"]) {
+            Message newMessage = Message(
+                messageID: ++messageCount,
+                fingerprint: item["From"],
+                wasSent: 0,
+                messageText: item["Content"]
+            );
+            insertMessage(newMessage);
+          }
+        }
+      }
+      else{
+        //Present an alert to retry send
+        showDialog(
+            context: context,
+            builder: (BuildContext context){
+              return AlertDialog(
+                title: Text("Failed to Load Messages"),
+                content: Text("Please try again."),
+                actions: <Widget>[
+                  FlatButton(
+                    child: Text("Close"),
+                    onPressed:(){
+                      Navigator.of(context).pop();
+                    },
+                  )
+                ],
+              );
+            }
+        );
+      }
     });
   }
 
+
   void sendMessage() async{
     final messageID = messageCount + 1;
-    final privateKey = await getPrivateKey();
     //Encrypt the message
     String messageText = encryptMsg(widget.chatInfo.symmetricKey, messageTextController.text, privateKey);
     //Create a new message
     Message newMessage = new Message(
         messageID: messageID,
         messageText: messageText,
-        pubKey: widget.chatInfo.pubKey,
+        fingerprint: widget.chatInfo.fingerprint,
         wasSent: 1,
     );
-    //Add the new message to the database
-    insertMessage(newMessage);
 
-    messageTextController.clear();
-    setState(() {
-      widget.messages.add(newMessage);
-      messageCount = messageID;
+    //Challenge the user to get the UUID
+    String uuid = await challengeUser(fingerPrint.toString(), widget.chatInfo.serverAddress);
+    //Create the signed challenge
+    String challenge = rsaSign(privateKey, uuid);
+    //Send the message
+    sendMsg(messageText, fingerPrint.toString(), challenge, widget.chatInfo.groupID, widget.chatInfo.serverAddress)
+    .then((http.Response response){
+      if(response.statusCode == 200){
+        //Add the new message to the database
+        insertMessage(newMessage);
+
+        messageTextController.clear();
+        setState(() {
+          messageList.add(newMessage);
+          messageCount = messageID;
+        });
+      }
+      else{
+        //Present an alert to retry send
+        showDialog(
+          context: context,
+          builder: (BuildContext context){
+            return AlertDialog(
+              title: Text("Message Failed to Send!"),
+              content: Text("Please try again."),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text("Close"),
+                  onPressed:(){
+                    Navigator.of(context).pop();
+                  },
+                )
+              ],
+            );
+          }
+        );
+      }
     });
 
-    //TODO Send message over network for other user
 
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0x21ffffff),
       appBar: AppBar(
         title: Text(widget.chatInfo.name),
       ),
@@ -131,9 +232,9 @@ class _MessageViewState extends State<MessageView>{
         children: <Widget>[
           Flexible(
               child: ListView.builder(
-                itemCount: widget.messages.length,
+                itemCount: messageList.length,
                 itemBuilder: (_, int position){
-                  final item = widget.messages[position];
+                  final item = messageList[position];
                   //Display each message on a card
                   //The wasSent value determines the message appearance
                   if(item.wasSent == 1){ //if message was sent
@@ -151,6 +252,7 @@ class _MessageViewState extends State<MessageView>{
                   }
                   else{ //if message was received
                     return Card(
+                      color: Colors.tealAccent,
                       child:Text(
                           decryptMsg(
                               widget.chatInfo.symmetricKey,
@@ -166,7 +268,9 @@ class _MessageViewState extends State<MessageView>{
           // The text entry field
           TextField(
             decoration: InputDecoration(
-                border: InputBorder.none,
+                border: OutlineInputBorder(),
+                filled: true,
+                fillColor: Color(0x10f0f0f0),
                 hintText: 'Write Something...'
             ),
             controller: messageTextController,

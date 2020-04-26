@@ -15,7 +15,7 @@ import 'package:paranoia/CreateServer.dart';
 import 'package:paranoia/GenerateKey.dart';
 import 'package:base32/base32.dart';
 import 'package:convert_hex/convert_hex.dart';
-
+import 'package:fluttertoast/fluttertoast.dart';
 
 class Primary extends StatefulWidget {
 
@@ -82,29 +82,46 @@ class _PrimaryState extends State<Primary> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: Color(0x21ffffff),
         appBar: AppBar(title: Text("User Registration")),
         body: Center(
             child: Column(
                 children: <Widget>[
-                  Text("Enter Server and Chat Information"),
+                  SizedBox(height: 15),
+                  Text("Enter Server and Chat Information",
+                    style: TextStyle(color: Color(0xffffffff), fontSize: 15),
+                  ),
+                  SizedBox(height: 15),
                   TextField(
                     decoration: InputDecoration(
-                        border: InputBorder.none,
+                        border: OutlineInputBorder(),
+                        filled: true,
+                        fillColor: Color(0x10f0f0f0),
                         hintText: 'URI input (IP:PORT)'
                     ),
                     controller: myController,
                   ),
+                  SizedBox(height: 5),
                   TextField(
                     decoration: InputDecoration(
-                        border: InputBorder.none,
+                        border: OutlineInputBorder(),
+                        filled: true,
+                        fillColor: Color(0x10f0f0f0),
                         hintText: 'Name of User (optional)'
                     ),
                     controller: name,
                   ),
                   RaisedButton(
                     child: Text('Generate keys'),
-                    color: Colors.green,
+                    color: Colors.blue,
                     onPressed: () {
+                      FocusScope.of(context).unfocus();
+                      Fluttertoast.showToast(
+                          msg: "Generating key. This may take a minute.",
+                          toastLength: Toast.LENGTH_LONG,
+                          gravity: ToastGravity.BOTTOM,
+                          fontSize: 16.0
+                      );
                       String pubKey = "";
                       //Generate new asymmetric key and store in database
                       generatePublicPrivateKeypair();
@@ -128,6 +145,10 @@ class _PrimaryState extends State<Primary> {
 
                           //Store the chat and keys into local database
                           String semkey = generateSymmetricKey();
+                          if (name.text == ""){
+                            name.text = pubKey.toString().substring(100,108);
+                          }
+                          ChatInfo chat = ChatInfo (pubKey: pubKey, fingerprint: createFingerprint(pubKey), name: name.text, symmetricKey: semkey, serverAddress: myController.text);
                           Navigator.push(
                               context,
                               MaterialPageRoute(builder: (context) => SemkeyQR(sem: semkey,)),);
@@ -135,6 +156,8 @@ class _PrimaryState extends State<Primary> {
                           insertChatInfo(chat);
 
                       });
+
+                      Fluttertoast.cancel();
 
                       Navigator.push(
                         context,
