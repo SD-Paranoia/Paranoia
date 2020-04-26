@@ -179,7 +179,7 @@ class DataCollector extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                       builder: (context) =>
-                          Group_Creation_Second(myController.text)),
+                          Group_Creation_Second(myController.text, "")),
                 );
               },
             )

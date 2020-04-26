@@ -10,13 +10,15 @@ import 'local_store.dart';
 import 'package:paranoia/networking.dart';
 import 'package:paranoia/CreateServer.dart';
 import 'package:paranoia/GenerateKey.dart';
+import 'package:paranoia/secondary_qrscanner_publickey.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:base32/base32.dart';
 
 
 class Group_Creation_Second extends StatefulWidget {
   final String ipAddr;
-  Group_Creation_Second(this.ipAddr, {Key key}) : super (key: key);
+  final String pubKey;
+  Group_Creation_Second(this.ipAddr, this.pubKey, {Key key}) : super (key: key);
 
   @override
   _Group_CreationSState createState() => _Group_CreationSState();
@@ -45,6 +47,7 @@ class _Group_CreationSState extends State<Group_Creation_Second> {
 
   @override
   Widget build(BuildContext context) {
+    myController.text = widget.pubKey;
     return Scaffold(
         backgroundColor: Color(0x21ffffff),
         appBar: AppBar(title: Text("Create a Group")),
@@ -62,13 +65,18 @@ class _Group_CreationSState extends State<Group_Creation_Second> {
                     ),
                     controller: myController,
                   ),
-
                   SizedBox(height: 15),
                   RaisedButton(
                     child: Text("Scan QR Code"),
                     color: Colors.blue,
                     onPressed: (){
                       //Switch to scanner
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                          SecondQRScanner(widget.ipAddr, "")),
+                      );
                     },
 
                   ),

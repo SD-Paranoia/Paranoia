@@ -12,11 +12,14 @@ import 'local_store.dart';
 import 'package:paranoia/networking.dart';
 import 'package:paranoia/CreateServer.dart';
 import 'package:paranoia/GenerateKey.dart';
+import 'package:paranoia/group_creation_secondary.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class SecondQRScanner extends StatefulWidget {
-  const SecondQRScanner({
+  final String ipAddr;
+  final String pubKey;
+  const SecondQRScanner(this.ipAddr, this.pubKey, {
     Key key,
   }) : super(key: key);
 
@@ -58,16 +61,6 @@ class _SecondQRState extends State<SecondQRScanner> {
               qrcontroller.flipCamera();
             },
           ),
-          RaisedButton(
-            child: Text("Next"),
-            color: Colors.blue,
-            onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => DataCollector(text: qrPublic)));
-            },
-          )
         ])));
   }
 
@@ -76,12 +69,11 @@ class _SecondQRState extends State<SecondQRScanner> {
     controller.scannedDataStream.listen((scanData) {
       setState(() {
         qrPublic = scanData;
-        Fluttertoast.showToast(
-          msg: "Public key scanned, click next",
-          toastLength: Toast.LENGTH_LONG,
-          gravity: ToastGravity.BOTTOM,
-          fontSize: 16.0
-        );
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+          builder: (context) => Group_Creation_Second(widget.ipAddr, qrPublic))
+          );
 //        semkey.text = qrPublic;
       });
     });
