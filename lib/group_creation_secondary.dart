@@ -91,6 +91,8 @@ class _Group_CreationSState extends State<Group_Creation_Second> {
                         print(retVal);
                       });
 
+                      Navigator.popUntil(context, ModalRoute.withName('/'));
+
                     },
 
                   ),
