@@ -78,7 +78,7 @@ class _SecondaryState extends State<Secondary> {
     this.qrcontroller = controller;
     controller.scannedDataStream.listen((scanData) {
       setState(() {
-        qrSym =  base32.decodeAsHexString(scanData);
+        qrSym =  base32.decodeAsString(scanData);
         Fluttertoast.showToast(
           msg: "Symmetric key scanned, click next",
           toastLength: Toast.LENGTH_LONG,

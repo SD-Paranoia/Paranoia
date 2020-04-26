@@ -161,7 +161,7 @@ class _Group_CreationState extends State<Group_Creation> {
     this.qrcontroller = controller;
     controller.scannedDataStream.listen((scanData) {
       setState(() {
-        qrText = base32.decodeAsHexString(scanData);
+        qrText = base32.decodeAsString(scanData);
         myController.text = qrText;
       });
     });
