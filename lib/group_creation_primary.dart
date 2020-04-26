@@ -65,9 +65,6 @@ class _Group_CreationState extends State<Group_Creation> {
         body: Center(
             child: Column(
                 children: <Widget>[
-                  SizedBox(height: 15),
-
-                  Text("Create a Group"),
                   Expanded(
                     child: QRView(
                       key: qrKey,
