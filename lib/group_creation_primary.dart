@@ -74,6 +74,7 @@ class _Group_CreationState extends State<Group_Creation> {
                       key: qrKey,
                       onQRViewCreated: _onQRViewCreated,
                     ),
+                    flex: 4,
                   ),
                   RaisedButton(
                     child: Text("Flip Camera"),
