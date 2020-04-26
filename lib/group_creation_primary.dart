@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:paranoia/asymmetric_encryption.dart';
 import 'package:paranoia/database_functions.dart';
+import 'package:paranoia/demo.dart';
 import 'package:paranoia/encryption_functions.dart';
 import 'package:paranoia/file_functions.dart';
 import 'package:http/http.dart' as http;
@@ -103,13 +104,6 @@ class _Group_CreationState extends State<Group_Creation> {
                   ),
                   SizedBox(height: 15),
 
-                  RaisedButton(
-                    child: Text("Scan Public Fingerprint QR Code"),
-                    color: Colors.greenAccent[400],
-                    /*onPressed: (){ scanQR();
-
-                    },*/
-                  ),
                   Text(scannedKey),
 
                   RaisedButton(
@@ -150,19 +144,23 @@ class _Group_CreationState extends State<Group_Creation> {
                         });
                       });
 
+                      print(finger);
 
-                    },
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => PubkeyQR(pub: finger,)),);
+                      },
 
                   ),
 
-                  Text("Public key: \n$pubFinger",
+                  /*Text("Public key: \n$pubFinger",
                     style: TextStyle(color: Color(0xffffffff), fontSize: 15),
                   ),
                   QrImage(
                     data: base32.encodeHexString(pubFinger.toString()),
                     size: 320,
                   ),
-                  Text("Public key: $pubFinger")
+                  Text("Public key: $pubFinger")*/
 
                 ])));
   }
@@ -188,4 +186,37 @@ class _Group_CreationState extends State<Group_Creation> {
     }
   }
 */
+}
+
+class PubkeyQR extends StatelessWidget{
+
+  final String pub;
+
+  PubkeyQR({@required this.pub});
+
+  @override
+  Widget build(BuildContext context){
+    return Scaffold(
+        appBar: AppBar(
+          title: Text('My Public Key'),
+        ),
+        body:
+        Center(
+          child: Column(
+              children: <Widget>[
+                QrImage(
+                  data: base32.encodeString(pub), size: 320,),
+                RaisedButton(
+                  child: Text('Home'),
+                  onPressed: (){
+                    Navigator.popUntil(context, ModalRoute.withName('/'));
+                  },
+                )
+              ]
+
+          ),
+        )
+
+    );
+  }
 }
