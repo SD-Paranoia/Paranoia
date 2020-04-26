@@ -143,9 +143,6 @@ class DataCollector extends StatelessWidget {
                 semkey.text = text;
                 //TODO -- register user via network
                 String pubKey = "";
-                //Generate new asymmetric key and store in database
-                generatePublicPrivateKeypair();
-
                 //Pull current user's pubkey from database
                 publicKeyAsString().then((String retVal) {
                   //Get the public key
