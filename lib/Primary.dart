@@ -152,7 +152,7 @@ class _PrimaryState extends State<Primary> {
                               MaterialPageRoute(builder: (context) => SemkeyQR(sem: semkey,)),);
 
 
-                      });
+
 
                       Fluttertoast.cancel();
 
@@ -160,7 +160,9 @@ class _PrimaryState extends State<Primary> {
                         context,
                         MaterialPageRoute(builder: (context) => Group_Creation(chat)),
                       );
+                      });
                     }
+
                   )
 
                 ])));
