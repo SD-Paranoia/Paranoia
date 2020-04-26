@@ -95,7 +95,8 @@ class DataCollector extends StatelessWidget {
   final myController = TextEditingController();
   final name = TextEditingController();
   final semkey = TextEditingController();
-  final groupIDField = TextEditingController();
+
+  ChatInfo chat;
 
   DataCollector({@required this.text});
 
@@ -137,13 +138,7 @@ class DataCollector extends StatelessWidget {
               controller: semkey,
             ),
             SizedBox(height: 5),
-            TextField(
-              decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  filled: true,
-                  hintText: 'Group ID'),
-              controller: groupIDField,
-            ),
+
             SizedBox(height: 15),
             RaisedButton(
               child: Text("Save Info"),
@@ -171,7 +166,7 @@ class DataCollector extends StatelessWidget {
                   if(name.text == ""){
                     name.text = pubKey.toString().substring(100,108);
                   }
-                  ChatInfo chat = ChatInfo(
+                  chat = ChatInfo(
                       pubKey: pubKey,
                       fingerprint: createFingerprint(pubKey),
                       name: name.text,
@@ -185,7 +180,7 @@ class DataCollector extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                       builder: (context) =>
-                          Group_Creation_Second("")),
+                          Group_Creation_Second(chat)),
                 );
               },
             )

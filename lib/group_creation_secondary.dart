@@ -16,8 +16,8 @@ import 'package:base32/base32.dart';
 
 
 class Group_Creation_Second extends StatefulWidget {
-  final String pubKey;
-  Group_Creation_Second(this.pubKey, {Key key}) : super (key: key);
+  final ChatInfo chat;
+  Group_Creation_Second(this.chat, {Key key}) : super (key: key);
 
   @override
   _Group_CreationSState createState() => _Group_CreationSState();
@@ -26,6 +26,7 @@ class Group_Creation_Second extends StatefulWidget {
 class _Group_CreationSState extends State<Group_Creation_Second> {
 
   final myController = TextEditingController();
+  final groupIDField = TextEditingController();
   var pubFinger;
   @override
   void dispose(){
@@ -46,7 +47,7 @@ class _Group_CreationSState extends State<Group_Creation_Second> {
 
   @override
   Widget build(BuildContext context) {
-    myController.text = widget.pubKey;
+    myController.text = widget.chat.pubKey;
     return Scaffold(
         appBar: AppBar(title: Text("Create a Group")),
         body: Center(
@@ -77,11 +78,29 @@ class _Group_CreationSState extends State<Group_Creation_Second> {
                       );
                     },
 
+
+                  ),
+                  TextField(
+                    decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        filled: true,
+                        hintText: 'Group ID'),
+                    controller: groupIDField,
                   ),
                   RaisedButton(
                     child: Text("Save Info"),
                     color: Colors.blue,
                     onPressed: (){
+                      ChatInfo newChat = ChatInfo(
+                          pubKey: widget.chat.pubKey,
+                          fingerprint: createFingerprint(widget.chat.pubKey),
+                          name: widget.chat.name,
+                          symmetricKey: widget.chat.symmetricKey,
+                          serverAddress: myController.text,
+                          groupID: groupIDField.text
+                      );
+
+                      insertChatInfo(newChat);
                       //Store in database
 
 

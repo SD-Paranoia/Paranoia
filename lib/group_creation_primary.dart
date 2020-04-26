@@ -119,7 +119,7 @@ class _Group_CreationState extends State<Group_Creation> {
                             getPublicKey().then((RSAPublicKey key2){
                               //Create the group on the server
                               createGroup(members, finger, signedChallenge, widget.chat.serverAddress).then((groupId){
-                                ChatInfo chat = ChatInfo(
+                                ChatInfo newChat = ChatInfo(
                                   pubKey: widget.chat.pubKey ,
                                   fingerprint: widget.chat.fingerprint,
                                   name: widget.chat.name,
@@ -128,9 +128,9 @@ class _Group_CreationState extends State<Group_Creation> {
                                   groupID: groupId,
                                 );
                                 setState(() {
-                                  newGroupID = chat.groupID;
+                                  newGroupID = newChat.groupID;
                                 });
-                                insertChatInfo(chat);
+                                insertChatInfo(newChat);
 
                               });
 
