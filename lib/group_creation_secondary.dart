@@ -16,9 +16,8 @@ import 'package:base32/base32.dart';
 
 
 class Group_Creation_Second extends StatefulWidget {
-  final String ipAddr;
   final String pubKey;
-  Group_Creation_Second(this.ipAddr, this.pubKey, {Key key}) : super (key: key);
+  Group_Creation_Second(this.pubKey, {Key key}) : super (key: key);
 
   @override
   _Group_CreationSState createState() => _Group_CreationSState();
@@ -75,7 +74,7 @@ class _Group_CreationSState extends State<Group_Creation_Second> {
                         context,
                         MaterialPageRoute(
                           builder: (context) =>
-                          SecondQRScanner(widget.ipAddr, "")),
+                          SecondQRScanner("")),
                       );
                     },
 
@@ -98,7 +97,7 @@ class _Group_CreationSState extends State<Group_Creation_Second> {
                   ),
 
                   QrImage(
-                    data: base32.encodeHexString(pubFinger.toString()),
+                    data: base32.encodeString(pubFinger.toString()),
                     size: 320,
                   ),
 

@@ -150,7 +150,7 @@ class _Group_CreationState extends State<Group_Creation> {
                     style: TextStyle(color: Color(0xffffffff), fontSize: 15),
                   ),
                   QrImage(
-                    data: base32.encodeHexString(pubFinger.toString()),
+                    data: base32.encodeString(pubFinger.toString()),
                     size: 320,
                   ),
                   Text("Public key: $pubFinger")*/
@@ -161,7 +161,7 @@ class _Group_CreationState extends State<Group_Creation> {
     this.qrcontroller = controller;
     controller.scannedDataStream.listen((scanData) {
       setState(() {
-        qrText = base32.decodeAsHexString(scanData);
+        qrText = base32.decodeAsString(scanData);
         myController.text = qrText;
       });
     });

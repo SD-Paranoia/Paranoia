@@ -18,9 +18,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:base32/base32.dart';
 
 class SecondQRScanner extends StatefulWidget {
-  final String ipAddr;
   final String pubKey;
-  const SecondQRScanner(this.ipAddr, this.pubKey, {
+  const SecondQRScanner(this.pubKey, {
     Key key,
   }) : super(key: key);
 
@@ -69,11 +68,11 @@ class _SecondQRState extends State<SecondQRScanner> {
     this.qrcontroller = controller;
     controller.scannedDataStream.listen((scanData) {
       setState(() {
-        qrPublic = base32.decodeAsHexString(scanData);
+        qrPublic = base32.decodeAsString(scanData);
         Navigator.push(
           context,
           MaterialPageRoute(
-          builder: (context) => Group_Creation_Second(widget.ipAddr, qrPublic))
+          builder: (context) => Group_Creation_Second(qrPublic))
           );
 //        semkey.text = qrPublic;
       });

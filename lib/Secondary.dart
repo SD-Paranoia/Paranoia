@@ -16,6 +16,7 @@ import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:qr_code_scanner/qr_scanner_overlay_shape.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:base32/base32.dart';
+import 'dart:convert';
 
 class Secondary extends StatefulWidget {
   const Secondary({
@@ -77,7 +78,7 @@ class _SecondaryState extends State<Secondary> {
     this.qrcontroller = controller;
     controller.scannedDataStream.listen((scanData) {
       setState(() {
-        qrSym =  base32.decodeAsHexString(scanData);
+        qrSym =  base32.decodeAsString(scanData);
         Fluttertoast.showToast(
           msg: "Symmetric key scanned, click next",
           toastLength: Toast.LENGTH_LONG,
@@ -181,7 +182,7 @@ class DataCollector extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                       builder: (context) =>
-                          Group_Creation_Second(myController.text, "")),
+                          Group_Creation_Second("")),
                 );
               },
             )
