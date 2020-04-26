@@ -43,7 +43,6 @@ class _SecondQRState extends State<SecondQRScanner> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Color(0x21ffffff),
         appBar: AppBar(title: Text("Scan User's Public Key")),
         body: Center(
             child: Column(children: <Widget>[
