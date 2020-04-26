@@ -41,7 +41,7 @@ class Message{
   Map<String, dynamic> toMap() {
     return {
       'messageID' : messageID,
-      'pubKey' : fingerprint,
+      'fingerprint' : fingerprint,
       'wasSent' : wasSent,
       'messageText' : messageText,
     };
