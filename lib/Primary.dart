@@ -139,9 +139,7 @@ class _PrimaryState extends State<Primary> {
                             name.text = pubKey.toString().substring(100,108);
                           }
                           chat = ChatInfo (pubKey: pubKey, fingerprint: createFingerprint(pubKey), name: name.text, symmetricKey: semkey, serverAddress: myController.text);
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => SemkeyQR(sem: semkey,)),);
+                          
 
 
 

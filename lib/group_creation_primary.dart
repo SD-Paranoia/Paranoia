@@ -18,6 +18,7 @@ import 'package:paranoia/CreateServer.dart';
 import 'package:paranoia/GenerateKey.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:qr_code_scanner/qr_scanner_overlay_shape.dart';
+import 'package:paranoia/Primary.dart';
 //import 'package:qrscan/qrscan.dart' as scanner;
 import 'package:base32/base32.dart';
 
@@ -79,6 +80,16 @@ class _Group_CreationState extends State<Group_Creation> {
                     onPressed: () {
                       qrcontroller.flipCamera();
                     },
+                  ),
+                  RaisedButton(
+                    child: Text("Display QR Code"),
+                    color: Colors.blue,
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => SemkeyQR(sem: widget.chat.symmetricKey)),
+                      );
+                    }
                   ),
 
                   TextField(
