@@ -17,7 +17,6 @@ class ParanoiaHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0x21ffffff),
       appBar: AppBar(
 //        leading: IconButton(
 //          icon: Icon(Icons.menu),
@@ -67,7 +66,6 @@ class ViewKey extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0x21ffffff),
       appBar: AppBar(
         title: Text('View Personal Key'),
       ),
@@ -82,7 +80,6 @@ class AddAKey extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0x21ffffff),
       appBar: AppBar(
         title: Text('Add a Key'),
       ),
@@ -95,7 +92,6 @@ class Chats extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0x21ffffff),
       appBar: AppBar(
         title: Text('Messages'),
       ),

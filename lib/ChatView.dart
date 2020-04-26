@@ -22,7 +22,6 @@ class _ChatViewState extends State<ChatView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Color(0x21ffffff),
         appBar: AppBar(
           title: Text("Chats"),
     ),
@@ -223,7 +222,6 @@ class _MessageViewState extends State<MessageView>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0x21ffffff),
       appBar: AppBar(
         title: Text(widget.chatInfo.name),
       ),
@@ -270,7 +268,6 @@ class _MessageViewState extends State<MessageView>{
             decoration: InputDecoration(
                 border: OutlineInputBorder(),
                 filled: true,
-                fillColor: Color(0x10f0f0f0),
                 hintText: 'Write Something...'
             ),
             controller: messageTextController,
