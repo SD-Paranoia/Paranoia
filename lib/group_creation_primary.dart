@@ -157,7 +157,7 @@ class _Group_CreationState extends State<Group_Creation> {
 
                   Text("Public key: \n$pubFinger",
                     style: TextStyle(color: Color(0xffffffff), fontSize: 15),
-                  )
+                  ),
                   QrImage(
                     data: base32.encodeHexString(pubFinger.toString()),
                     size: 320,

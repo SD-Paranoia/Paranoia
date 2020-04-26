@@ -152,7 +152,6 @@ class _PrimaryState extends State<Primary> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(builder: (context) => SemkeyQR(sem: semkey,)),);
-                          ChatInfo chat = ChatInfo (pubKey: pubKey, name: name.text, symmetricKey: semkey, serverAddress: myController.text);
                           insertChatInfo(chat);
 
                       });
