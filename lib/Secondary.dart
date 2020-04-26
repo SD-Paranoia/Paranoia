@@ -164,6 +164,9 @@ class DataCollector extends StatelessWidget {
                   });
 
                   //Store chat data into database
+                  if(name.text == ""){
+                    name.text = pubKey.toString().substring(100,108);
+                  }
                   ChatInfo chat = ChatInfo(
                       pubKey: pubKey,
                       fingerprint: createFingerprint(pubKey),
