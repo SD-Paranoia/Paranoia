@@ -131,8 +131,9 @@ class _MessageViewState extends State<MessageView>{
         Map<String, dynamic> jsonObj = jsonDecode(response.body);
         if(jsonObj["Msgs"] != null) {
           for (var item in jsonObj["Msgs"]) {
+            messageCount += 1;
             Message newMessage = Message(
-                messageID: ++messageCount,
+                messageID: messageCount,
                 fingerprint: item["From"],
                 wasSent: 0,
                 messageText: item["Content"]
