@@ -61,16 +61,13 @@ class _Group_CreationState extends State<Group_Creation> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Color(0x21ffffff),
         appBar: AppBar(title: Text("Create a Group")),
         body: Center(
             child: Column(
                 children: <Widget>[
                   SizedBox(height: 15),
 
-                  Text("Create a Group",
-                    style: TextStyle(color: Color(0xffffffff), fontSize: 15),
-                  ),
+                  Text("Create a Group"),
                   SizedBox(height: 15),
                   Expanded(
                     child: QRView(
@@ -90,7 +87,6 @@ class _Group_CreationState extends State<Group_Creation> {
                     decoration: InputDecoration(
                         border: OutlineInputBorder(),
                         filled: true,
-                        fillColor: Color(0x10f0f0f0),
                         hintText: 'Public Fingerprint of Secondary user'
                     ),
                     controller: myController,
