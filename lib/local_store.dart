@@ -98,7 +98,8 @@ class _LocalStorageState extends State<LocalStorage>{
                       fingerprint: createFingerprint(publicKey),
                       name: "User_Jordan_Real_Key",
                       symmetricKey: keyVal,
-                      serverAddress: "addr"
+                      serverAddress: "addr",
+                      groupID: "group_id",
                   );
                   await insertChatInfo(chat);
 
