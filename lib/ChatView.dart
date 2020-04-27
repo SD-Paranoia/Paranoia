@@ -276,7 +276,29 @@ class _MessageViewState extends State<MessageView>{
           RaisedButton(
             child: Text("Send"),
             onPressed: sendMessage,
+          ),RaisedButton(
+            child: Text("ChatInfo"),
+            onPressed: (){
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context){
+                    return AlertDialog(
+                      title: Text("ChatInfo"),
+                      content: SingleChildScrollView(child: Text(widget.chatInfo.toString())),
+                      actions: <Widget>[
+                        FlatButton(
+                          child: Text("Close"),
+                          onPressed:(){
+                            Navigator.of(context).pop();
+                          },
+                        )
+                      ],
+                    );
+                  }
+              );
+            },
           )
+
         ],
       )
           );

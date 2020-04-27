@@ -53,7 +53,7 @@ class _Group_CreationSState extends State<Group_Creation_Second> {
     return Scaffold(
         appBar: AppBar(title: Text("Create a Group")),
         body: Center(
-            child: Column(
+            child: ListView(
                 children: <Widget>[
                   SizedBox(height: 15),
                   Text("Create a Group"),
@@ -97,7 +97,7 @@ class _Group_CreationSState extends State<Group_Creation_Second> {
                           fingerprint: createFingerprint(widget.chat.pubKey),
                           name: widget.chat.name,
                           symmetricKey: widget.chat.symmetricKey,
-                          serverAddress: myController.text,
+                          serverAddress: widget.chat.serverAddress,
                           groupID: groupIDField.text
                       );
 

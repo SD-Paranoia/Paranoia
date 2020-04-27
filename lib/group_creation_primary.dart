@@ -139,7 +139,7 @@ class _Group_CreationState extends State<Group_Creation> {
                                   groupID: groupId,
                                 );
                                 setState(() {
-                                  newGroupID = newChat.groupID;
+                                  newGroupID = widget.chat.groupID;
                                 });
                                 insertChatInfo(newChat);
 
