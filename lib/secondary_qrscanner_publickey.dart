@@ -68,7 +68,7 @@ class _SecondQRState extends State<SecondQRScanner> {
     this.qrcontroller = controller;
     controller.scannedDataStream.listen((scanData) {
       setState(() {
-        qrPublic = base32.decodeAsHexString(scanData);
+        qrPublic = base32.decodeAsString(scanData);
         Navigator.push(
           context,
           MaterialPageRoute(
