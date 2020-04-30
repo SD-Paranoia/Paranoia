@@ -110,23 +110,27 @@ Future<String> createGroup(List members, String fingerPrint, String signedChalle
   return groupID;
 }
 
-Future<http.Response> getMsg(String fingerPrint, String signedChallenge, String ipPort) async {
+Future<http.Response> getMsg(String fingerPrint, String signedChallenge, String group, String ipPort) async {
   var client = http.Client();
   http.Response uriResponse;
+  print(signedChallenge);
 
   try {
     uriResponse = await client.post("https://"+ipPort+"/read",
         headers: {"Content-Type": "application/json"},
-        body: json.encode({'Fingerprint': fingerPrint,"SignedChallenge":signedChallenge})
+        body: json.encode({'Fingerprint': fingerPrint,"SignedChallenge":signedChallenge, "GroupID":group})
     );
+    print("Fingerprint: $fingerPrint");
+    print("SignedChallenge: $signedChallenge");
+
 
     if (uriResponse.statusCode == 200){
       //TODO -- do something here
       String response = uriResponse.toString();
-      print(response);
+      print(uriResponse.body);
     }
     else {
-      print("Failed to read message");
+      print("Failed to read message. Code: " + uriResponse.statusCode.toString());
     }
   }
   finally{
