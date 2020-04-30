@@ -194,6 +194,7 @@ class _MessageViewState extends State<MessageView>{
         messageText: messageText,
         fingerprint: widget.chatInfo.fingerprint,
         wasSent: 1,
+        groupID: widget.chatInfo.groupID
     );
 
     //Challenge the user to get the UUID
@@ -296,26 +297,15 @@ class _MessageViewState extends State<MessageView>{
           RaisedButton(
             child: Text("Send"),
             onPressed: sendMessage,
-          ),RaisedButton(
-            child: Text("ChatInfo"),
+          ),
+          RaisedButton(
+            child: Text("Refresh Chat"),
             onPressed: (){
-              showDialog(
-                  context: context,
-                  builder: (BuildContext context){
-                    return AlertDialog(
-                      title: Text("ChatInfo"),
-                      content: SingleChildScrollView(child: Text(widget.chatInfo.toString())),
-                      actions: <Widget>[
-                        FlatButton(
-                          child: Text("Close"),
-                          onPressed:(){
-                            Navigator.of(context).pop();
-                          },
-                        )
-                      ],
-                    );
-                  }
-              );
+              messagesByFingerprint(widget.chatInfo.groupID).then((List<Message> retVal){
+                setState(() {
+                  messageList = retVal;
+                });
+              });
             },
           )
 
