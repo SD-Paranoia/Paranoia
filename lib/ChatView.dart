@@ -5,6 +5,7 @@ import 'package:paranoia/database_functions.dart';
 import 'package:paranoia/encryption_functions.dart';
 import 'package:paranoia/networking.dart';
 import 'package:http/http.dart' as http;
+import 'package:pointycastle/asymmetric/api.dart';
 
 class ChatView extends StatefulWidget{
 
@@ -76,7 +77,7 @@ class _MessageViewState extends State<MessageView>{
   final messageTextController = TextEditingController();
   List<Message> messageList = new List<Message>();
   int messageCount;
-  var privateKey;
+  RSAPrivateKey privateKey;
   var fingerPrint;
   //Needed to cleanup the text editing controller and free
   // its resources
@@ -107,7 +108,7 @@ class _MessageViewState extends State<MessageView>{
             messageCount = 0;
           }
           getMessages().then((void retVal){
-            messagesByFingerprint(fingerPrint.toString()).then((List<Message> messages){
+            messagesByFingerprint(widget.chatInfo.groupID).then((List<Message> messages){
               if(messages != null){
                 setState(() {
                   messageList = messages;
@@ -124,21 +125,42 @@ class _MessageViewState extends State<MessageView>{
     //Challenge the user to get the UUID
     String uuid = await challengeUser(fingerPrint.toString(), widget.chatInfo.serverAddress);
     //Create the signed challenge
+    print(uuid);
+
+    messages().then((var retval){
+        print(retval.toString());
+    });
+
     String challenge = rsaSign(privateKey, uuid);
-    getMsg(fingerPrint.toString(), challenge, widget.chatInfo.serverAddress)
+    String id = widget.chatInfo.groupID;
+    print("GroupID: $id");
+    getMsg(fingerPrint.toString(), challenge, id, widget.chatInfo.serverAddress)
+
     .then((http.Response response){
       if(response.statusCode == 200){
         Map<String, dynamic> jsonObj = jsonDecode(response.body);
         if(jsonObj["Msgs"] != null) {
           for (var item in jsonObj["Msgs"]) {
-            messageCount += 1;
-            Message newMessage = Message(
-                messageID: messageCount,
-                fingerprint: item["From"],
-                wasSent: 0,
-                messageText: item["Content"]
-            );
-            insertMessage(newMessage);
+            //if (item["From"] != fingerPrint.toString()) {
+              messageCount += 1;
+              print(messageCount);
+              Message newMessage = Message(
+                  messageID: messageCount,
+                  fingerprint: item["From"],
+                  wasSent: 0,
+                  messageText: item["Content"],
+                  groupID: id
+
+              );
+
+              print('------------------------+--------------------------');
+              print(decryptMsg(widget.chatInfo.symmetricKey, newMessage.messageText, widget.chatInfo.pubKey));
+              print('------------------------+------------++-------------');
+              //print("Inserting $newMessage into database");
+              insertMessage(newMessage).then((mew){
+
+              });
+            //}
           }
         }
       }
@@ -232,35 +254,17 @@ class _MessageViewState extends State<MessageView>{
           Flexible(
               child: ListView.builder(
                 itemCount: messageList.length,
-                itemBuilder: (_, int position){
-                  final item = messageList[position];
+                itemBuilder: (context, position){
+                  //final item = messageList[position];
                   //Display each message on a card
                   //The wasSent value determines the message appearance
-                  if(item.wasSent == 1){ //if message was sent
-                    return Card(
-                      child: Text(
-                        decryptMsg(
-                          widget.chatInfo.symmetricKey,
-                          item.messageText,
-                          widget.chatInfo.pubKey
-                        )
-                      ),
-                      color: Colors.blue,
-
-                    );
-                  }
-                  else{ //if message was received
-                    return Card(
-                      color: Colors.tealAccent,
-                      child:Text(
-                          decryptMsg(
-                              widget.chatInfo.symmetricKey,
-                              item.messageText,
-                              widget.chatInfo.pubKey
-                          )
-                      )
-                    );
-                  }
+                  return ListTile(
+                    title: Text(decryptMsg(
+                        widget.chatInfo.symmetricKey,
+                        messageList[position].messageText,
+                        widget.chatInfo.pubKey
+                    )),
+                  );
                 },
               ),
           ),
