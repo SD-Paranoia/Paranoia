@@ -35,8 +35,9 @@ class Message{
   final String fingerprint;
   final int wasSent;
   final String messageText;
+  final String groupID;
 
-  Message({this.messageID, this.fingerprint, this.wasSent, this.messageText});
+  Message({this.messageID, this.fingerprint, this.wasSent, this.messageText, this.groupID});
 
   Map<String, dynamic> toMap() {
     return {
@@ -44,11 +45,12 @@ class Message{
       'fingerprint' : fingerprint,
       'wasSent' : wasSent,
       'messageText' : messageText,
+      'groupID' : groupID,
     };
   }
   @override
   String toString(){
-    return 'Message{messageID: $messageID, fingerprint: $fingerprint, wasSent: $wasSent, messageText: $messageText}';
+    return 'Message{messageID: $messageID, fingerprint: $fingerprint, wasSent: $wasSent, messageText: $messageText, groupID: $groupID}';
   }
 
 }
@@ -93,7 +95,7 @@ Future<Database> openMessageDB() async{
 
     onCreate: (db, version) {
       return db.execute(
-        "CREATE TABLE message(messageID INTEGER PRIMARY KEY, fingerprint TEXT, wasSent INTEGER, messageText TEXT)",
+        "CREATE TABLE message(messageID INTEGER PRIMARY KEY, fingerprint TEXT, wasSent INTEGER, messageText TEXT, groupID TEXT)",
       );
     },
     version:1,
@@ -131,20 +133,22 @@ Future<List<Message>> messages() async{
       fingerprint: maps[i]['fingerprint'],
       wasSent: maps[i]['wasSent'],
       messageText: maps[i]['messageText'],
+      groupID: maps[i]['groupId'],
+
     );
   });
 }
 //A function to retrieve a list of messages based on what conversation they are
 // a part of
-Future<List<Message>> messagesByFingerprint(String fingerprint) async{
+Future<List<Message>> messagesByFingerprint(String groupID) async{
   final Database db = await openDB("Message");
   //Query for the messages with the provided pubKey
   final List<Map<String, dynamic>> maps = await db.query(
     'message',
     //Ensure matching public key
-    where: "fingerprint = ?",
+    where: "groupID = ?",
     //Pass the pubKey as a whereArg to prevent SQL injection
-    whereArgs: [fingerprint],
+    whereArgs: [groupID],
   );
 
   return List.generate(maps.length, (i) {
