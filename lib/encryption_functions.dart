@@ -35,12 +35,13 @@ String decryptMsg(String key, String msg, String publicKey){
     String iv = message.substring(0, 16);
     //Get the encrypted text from the remaining portion of the message
     String messageText = message.substring(16);
-
     if(rsaVerify(getPublicKeyFromString(publicKey), signature, message)){
+      print("Pubkey: $publicKey");
       decryptedMessage = decrypter.decrypt(messageText,iv);
     }
     else{
       decryptedMessage = "MESSAGE INTEGRITY VERIFICATION FAILED";
+      decryptedMessage = decrypter.decrypt(messageText,iv);
     }
 
     //Decrypt the message using the IV from the message.

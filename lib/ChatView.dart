@@ -141,7 +141,7 @@ class _MessageViewState extends State<MessageView>{
         Map<String, dynamic> jsonObj = jsonDecode(response.body);
         if(jsonObj["Msgs"] != null) {
           for (var item in jsonObj["Msgs"]) {
-            //if (item["From"] != fingerPrint.toString()) {
+            if (item["From"] != fingerPrint.toString()) {
               messageCount += 1;
               print(messageCount);
               Message newMessage = Message(
@@ -153,14 +153,10 @@ class _MessageViewState extends State<MessageView>{
 
               );
 
-              print('------------------------+--------------------------');
-              print(decryptMsg(widget.chatInfo.symmetricKey, newMessage.messageText, widget.chatInfo.pubKey));
-              print('------------------------+------------++-------------');
-              //print("Inserting $newMessage into database");
               insertMessage(newMessage).then((mew){
 
               });
-            //}
+            }
           }
         }
       }
@@ -255,16 +251,36 @@ class _MessageViewState extends State<MessageView>{
               child: ListView.builder(
                 itemCount: messageList.length,
                 itemBuilder: (context, position){
-                  //final item = messageList[position];
+                  final item = messageList[position];
                   //Display each message on a card
                   //The wasSent value determines the message appearance
-                  return ListTile(
-                    title: Text(decryptMsg(
-                        widget.chatInfo.symmetricKey,
-                        messageList[position].messageText,
-                        widget.chatInfo.pubKey
-                    )),
-                  );
+                  if(item.wasSent == 1){ //if message was sent
+                    print(item);
+                    return Card(
+                      child: Text(
+                          decryptMsg(
+                              widget.chatInfo.symmetricKey,
+                              item.messageText,
+                              widget.chatInfo.pubKey
+                          )
+                      ),
+                      color: Colors.blue,
+
+                    );
+                  }
+                  else{ //if message was received
+                    print(item);
+                    return Card(
+                        color: Colors.tealAccent,
+                        child:Text(
+                            decryptMsg(
+                                widget.chatInfo.symmetricKey,
+                                item.messageText,
+                                widget.chatInfo.pubKey
+                            )
+                        )
+                    );
+                  }
                 },
               ),
           ),

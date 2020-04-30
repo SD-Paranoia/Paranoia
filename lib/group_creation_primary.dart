@@ -131,7 +131,7 @@ class _Group_CreationState extends State<Group_Creation> {
                               //Create the group on the server
                               createGroup(members, finger, signedChallenge, widget.chat.serverAddress).then((groupId){
                                 ChatInfo newChat = ChatInfo(
-                                  pubKey: widget.chat.pubKey ,
+                                  pubKey: pubKey,
                                   fingerprint: widget.chat.fingerprint,
                                   name: widget.chat.name,
                                   symmetricKey: widget.chat.symmetricKey,
@@ -139,9 +139,13 @@ class _Group_CreationState extends State<Group_Creation> {
                                   groupID: groupId,
                                 );
                                 setState(() {
-                                  newGroupID = widget.chat.groupID;
+                                  newGroupID = groupId;
+                                  insertChatInfo(newChat);
                                 });
-                                insertChatInfo(newChat);
+
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => PubkeyQR(pub: finger,newGroupID: newGroupID)),);
 
                               });
 
@@ -156,9 +160,7 @@ class _Group_CreationState extends State<Group_Creation> {
 
                       print(finger);
 
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => PubkeyQR(pub: finger,newGroupID: newGroupID)),);
+
                       },
 
                   ),
@@ -198,11 +200,30 @@ class _Group_CreationState extends State<Group_Creation> {
 */
 }
 
-class PubkeyQR extends StatelessWidget{
-
+class PubkeyQR extends StatefulWidget {
   final String pub;
   final String newGroupID;
+
   PubkeyQR({@required this.pub, @required this.newGroupID});
+  @override
+  _PubkeyQRState createState() => _PubkeyQRState();
+
+}
+
+class _PubkeyQRState extends State<PubkeyQR>{
+  String pubkey;
+  String groupid;
+  @override
+  void initState(){
+    super.initState();
+
+      pubkey = widget.pub;
+      groupid = widget.newGroupID;
+      print("Pubkey: $pubkey");
+      print("GroupID: $groupid");
+
+  }
+
 
   @override
   Widget build(BuildContext context){
@@ -215,9 +236,9 @@ class PubkeyQR extends StatelessWidget{
           child: Column(
               children: <Widget>[
                 QrImage(
-                  data: base32.encodeString(pub), size: 320,
+                  data: base32.encodeString(pubkey), size: 320,
                 ),
-                Text("GROUP ID: $newGroupID\n"),
+                Text("GROUP ID: $groupid\n"),
                 RaisedButton(
                   child: Text('Home'),
                   onPressed: (){

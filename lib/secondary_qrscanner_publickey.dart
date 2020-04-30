@@ -20,7 +20,7 @@ import 'package:base32/base32.dart';
 class SecondQRScanner extends StatefulWidget {
   final ChatInfo chat;
   final String pubQRKey;
-  const SecondQRScanner(this.chat, this.pubQRKey, {
+  SecondQRScanner(this.chat, this.pubQRKey, {
     Key key,
   }) : super(key: key);
 

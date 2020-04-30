@@ -29,6 +29,7 @@ class _Group_CreationSState extends State<Group_Creation_Second> {
   final myController = TextEditingController();
   final groupIDField = TextEditingController();
   var pubFinger;
+  RSAPublicKey pubKeyInit;
   @override
   void dispose(){
     myController.dispose();
@@ -44,12 +45,25 @@ class _Group_CreationSState extends State<Group_Creation_Second> {
         pubFinger = fingerPrint;
       });
     });
+
+    getPublicKey().then((RSAPublicKey pubKey){
+      setState(() {
+        pubKeyInit = pubKey;
+      });
+    });
+
+    widget.chat.name;
+    widget.chat.symmetricKey;
+    widget.chat.serverAddress;
+    groupIDField.text;
+
   }
   
 
   @override
   Widget build(BuildContext context) {
     myController.text = widget.pubQRKey;
+    String pubKey;
     return Scaffold(
         appBar: AppBar(title: Text("Create a Group")),
         body: Center(
@@ -92,24 +106,29 @@ class _Group_CreationSState extends State<Group_Creation_Second> {
                     child: Text("Save Info"),
                     color: Colors.blue,
                     onPressed: (){
-                      ChatInfo newChat = ChatInfo(
-                          pubKey: myController.text,
-                          fingerprint: createFingerprint(widget.chat.pubKey),
-                          name: widget.chat.name,
-                          symmetricKey: widget.chat.symmetricKey,
-                          serverAddress: widget.chat.serverAddress,
-                          groupID: groupIDField.text
-                      );
+                      publicKeyAsString().then((String retPubKey){
+                        pubKey = retPubKey;
+
+                        ChatInfo newChat = ChatInfo(
+                            pubKey: pubKey,
+                            fingerprint: createFingerprint(pubKeyInit.toString()),
+                            name: widget.chat.name,
+                            symmetricKey: widget.chat.symmetricKey,
+                            serverAddress: widget.chat.serverAddress,
+                            groupID: groupIDField.text
+                        );
 
                       insertChatInfo(newChat);
+                      Navigator.popUntil(context, ModalRoute.withName('/'));
+
                       //Store in database
 
-
+                      });
                       chats().then((var retVal){
                         print(retVal);
                       });
 
-                      Navigator.popUntil(context, ModalRoute.withName('/'));
+
 
                     },
 
