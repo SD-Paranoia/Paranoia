@@ -157,6 +157,7 @@ Future<List<Message>> messagesByFingerprint(String groupID) async{
       fingerprint: maps[i]['fingerprint'],
       wasSent: maps[i]['wasSent'],
       messageText: maps[i]['messageText'],
+      groupID: maps[i]['groupID']
     );
   });
 }
