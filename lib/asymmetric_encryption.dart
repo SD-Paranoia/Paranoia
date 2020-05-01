@@ -163,7 +163,8 @@ bool rsaVerify(RSAPublicKey publicKey, String signature, String message){
   final messageBytes = utf8.encode(message);
   try{
     return verifier.verifySignature(messageBytes, sig);
-  }on ArgumentError {
+  }catch(e) {
+    print(e.toString());
     return false;
   }
 }
