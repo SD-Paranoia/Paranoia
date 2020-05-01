@@ -257,29 +257,53 @@ class _MessageViewState extends State<MessageView>{
                   //The wasSent value determines the message appearance
                   if(item.wasSent == 1){ //if message was sent
                     print(item);
-                    return Card(
-                      child: Text(
-                          decryptMsg(
-                              widget.chatInfo.symmetricKey,
-                              item.messageText,
-                              widget.chatInfo.pubKey
-                          )
-                      ),
-                      color: Colors.blue,
+                    return
+                    Align(
 
+                    alignment: Alignment.centerLeft,
+                      child: ConstrainedBox(
+                          constraints: new BoxConstraints(
+                            minHeight: 50,
+                            maxWidth: 250,
+                            minWidth: 100,
+                          ),
+                          child: Card(
+                              color: Colors.blue,
+                                child:Text(
+                                    decryptMsg(
+                                        widget.chatInfo.symmetricKey,
+                                        item.messageText,
+                                        widget.chatInfo.pubKey
+                                    )
+                                )
+                          )
+                      )
                     );
                   }
                   else{ //if message was received
                     print(item);
-                    return Card(
-                        color: Colors.tealAccent,
-                        child:Text(
-                            decryptMsg(
-                                widget.chatInfo.symmetricKey,
-                                item.messageText,
-                                widget.chatInfo.pubKey
-                            )
-                        )
+                    return
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: ConstrainedBox(
+                        constraints: new BoxConstraints(
+                          minHeight: 50,
+                          minWidth: 100,
+                          maxWidth: 250,
+                        ),
+
+                        child: Card(
+                          color: Colors.tealAccent,
+                            child:Text(
+                                decryptMsg(
+                                    widget.chatInfo.symmetricKey,
+                                    item.messageText,
+                                    widget.chatInfo.pubKey
+                                )
+
+                          )
+                      )
+                      )
                     );
                   }
                 },
@@ -301,11 +325,35 @@ class _MessageViewState extends State<MessageView>{
           RaisedButton(
             child: Text("Refresh Chat"),
             onPressed: (){
-              messagesByFingerprint(widget.chatInfo.groupID).then((List<Message> retVal){
+              getPublicFingerprint().then((var fing){
                 setState(() {
-                  messageList = retVal;
+                  fingerPrint = fing;
                 });
-              });
+                getPrivateKey().then((var key){
+                  setState(() {
+                    privateKey = key;
+                  });
+                  messages().then((List<Message> allMessages){
+                    if(allMessages != null) {
+                      setState(() {
+                        messageCount = allMessages.length;
+                      });
+                    }
+                    else{
+                      messageCount = 0;
+                    }
+                    getMessages().then((void retVal){
+                      messagesByFingerprint(widget.chatInfo.groupID).then((List<Message> messages){
+                        if(messages != null){
+                          setState(() {
+                            messageList = messages;
+                          });
+                        }
+                      });//messagesByFingerprint
+                    });//getMessages()
+                  });//messages()
+                });//getPrivateKey()
+              });//getPublicFingerprint()
             },
           )
 
